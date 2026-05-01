@@ -1,3 +1,14 @@
+"""
+Bronze layer ingestion script.
+
+Downloads raw data from Kaggle and uploads it to S3 Bronze layer.
+
+Flow:
+1. Load Kaggle credentials from AWS Secrets Manager
+2. Download competition data using kagglehub
+3. Upload files to: s3://<bucket>/sales_predict/bronze/
+"""
+
 import argparse
 import logging
 from pathlib import Path
@@ -24,16 +35,22 @@ logger = logging.getLogger(__name__)
 
 
 def parse_args():
+    """
+    Parse CLI arguments.
+
+    Returns:
+        Namespace with:
+            - bucket (str): target S3 bucket
+            - secret_name (str): Secrets Manager key
+            - region_name (str): AWS region
+    """
     parser = argparse.ArgumentParser(description="Bronze layer ingestion")
 
     parser.add_argument("--bucket", required=True, help="S3 bucket name")
-    parser.add_argument("--data-dir", required=True, help="Local data directory")
+    parser.add_argument("--secret-name", default="kaggle/credentials")
+    parser.add_argument("--region-name", default="us-east-1")
 
     return parser.parse_args()
-
-
-# parser.add_argument("--secret-name", default="kaggle/credentials")
-# parser.add_argument("--region-name", default="us-east-1")
 
 
 # ============================================================================
@@ -42,6 +59,14 @@ def parse_args():
 
 
 def load_kaggle_credentials(secret_name: str, region_name: str) -> None:
+    """
+    Load Kaggle credentials from AWS Secrets Manager and
+    set them as environment variables.
+
+    Args:
+        secret_name (str): name of the secret
+        region_name (str): AWS region
+    """
     client = boto3.client("secretsmanager", region_name=region_name)
 
     response = client.get_secret_value(SecretId=secret_name)
@@ -52,6 +77,16 @@ def load_kaggle_credentials(secret_name: str, region_name: str) -> None:
 
 
 def upload_to_s3(local_path: str, bucket: str) -> None:
+    """
+    Upload all files from a local directory to S3 Bronze layer.
+
+    Files are stored at:
+        s3://<bucket>/sales_predict/bronze/<file_name>
+
+    Args:
+        local_path (str): directory containing downloaded files
+        bucket (str): target S3 bucket
+    """
     logger.info("Loading raw data")
 
     s3 = boto3.client("s3")
@@ -72,6 +107,12 @@ def upload_to_s3(local_path: str, bucket: str) -> None:
 
 
 def main():
+    """
+    Orchestrates the ingestion process:
+    - Loads credentials
+    - Downloads data from Kaggle
+    - Uploads raw files to S3
+    """
     args = parse_args()
 
     logger.info("Starting raw data extraction")
