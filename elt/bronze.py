@@ -137,7 +137,6 @@ def main():
 
     logger.info(f"Kaggle files downloaded to: {path}")
 
-    # TODO: Add asserts with data validation
     logger.info("Loading raw data to s3")
     try:
         upload_to_s3(local_path=path, bucket=args.bucket)
