@@ -55,10 +55,11 @@ def parse_args():
 FEATURES = [
     "date_block_num",
     "shop_id",
+    "city_code",
     "item_id",
     "item_category_id",
-    "avg_item_price",
-    "revenue_month",
+    #"avg_item_price",
+    #"revenue_month",
     "item_cnt_month_lag_1",
     "item_cnt_month_lag_2",
     "item_cnt_month_lag_3",
@@ -90,7 +91,7 @@ def read_gold_data(bucket: str) -> pd.DataFrame:
 
     logger.info(f"Reading Gold data from {path}")
 
-    return wr.s3.read_parquet(path)
+    return wr.s3.read_parquet(path, dataset=True)
 
 
 def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
@@ -105,7 +106,7 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
     """
     logger.info("Preparing training data")
 
-    required_cols = FEATURES + [TARGET]
+    required_cols = FEATURES + [TARGET, "inactive"]
     missing = set(required_cols) - set(df.columns)
 
     if missing:
@@ -113,7 +114,9 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
         raise ValueError(f"Missing columns: {missing}")
 
     df = df[required_cols].copy()
+    df = df[df["inactive"] == 0]
     df = df.dropna()
+    df['date_block_num'] = df['date_block_num'].astype(int)
 
     logger.info(f"Training data prepared: {len(df)} rows")
 
@@ -136,7 +139,7 @@ def train_model(df: pd.DataFrame) -> tuple[XGBRegressor, pd.DataFrame]:
     test_df = df[df["date_block_num"] == 33].copy()
 
     X_train = train_df[FEATURES]
-    y_train = train_df[TARGET]
+    y_train = train_df[TARGET].clip(lower=0, upper=20)
 
     X_test = test_df[FEATURES]
 
@@ -151,7 +154,7 @@ def train_model(df: pd.DataFrame) -> tuple[XGBRegressor, pd.DataFrame]:
     model.fit(X_train, y_train)
 
     test_df["prediction"] = model.predict(X_test)
-    test_df["prediction"] = test_df["prediction"].clip(lower=0)
+    test_df["prediction"] = test_df["prediction"].clip(lower=0, upper=20)
     test_df["model_name"] = "xgboost_simple"
 
     logger.info("Model training completed")
@@ -172,9 +175,9 @@ def evaluate_backtesting(predictions: pd.DataFrame) -> pd.DataFrame:
     """
     logger.info("Evaluating backtesting performance")
 
-    y_true = predictions[TARGET]
-    y_pred = predictions["prediction"]
-    y_naive = predictions["naive_3m_prediction"]
+    y_true = predictions[TARGET].clip(lower=0, upper=20)
+    y_pred = predictions["prediction"].clip(lower=0, upper=20)
+    y_naive = predictions["naive_3m_prediction"].clip(lower=0, upper=20)
 
     mae_model = mean_absolute_error(y_true, y_pred)
     rmse_model = mean_squared_error(y_true, y_pred) ** 0.5

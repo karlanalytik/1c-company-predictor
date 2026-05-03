@@ -102,10 +102,40 @@ def create_monthly_sales(sales: pd.DataFrame) -> pd.DataFrame:
         revenue_month=("revenue", "sum"),
     )
 
+    monthly_sales["item_cnt_month"] = monthly_sales["item_cnt_month"].clip(0, 20)
+
     logger.info(f"Monthly sales created: {len(monthly_sales)} rows")
 
     return monthly_sales
 
+
+def add_city_feature(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Extract city name from shop_name and encode it as a numeric feature.
+    """
+    df = df.copy()
+
+    df["city_name"] = (
+        df["shop_name"]
+        .str.strip()
+        .str.replace(r"^[^A-Za-zА-Яа-я]+", "", regex=True)
+        .str.split()
+        .str[0]
+    )
+
+    city_mapping = {
+        "СПб": "Санкт-Петербург",
+        "Н.Новгород": "Нижний_Новгород",
+        "РостовНаДону": "Ростов_на_Дону",
+        "Выездная": "online_other",
+        "Интернет-магазин": "online_other",
+        "Цифровой": "online_other",
+    }
+
+    df["city_name"] = df["city_name"].replace(city_mapping)
+    df["city_code"] = df["city_name"].astype("category").cat.codes
+
+    return df
 
 def merge_tables(
     monthly_sales: pd.DataFrame,
@@ -164,6 +194,18 @@ def add_naive_features(df: pd.DataFrame) -> pd.DataFrame:
         ]
     ].mean(axis=1)
 
+    lag_cols = []
+    for lag in [1, 2, 3]:
+        col = f"item_cnt_month_lag_{lag}"
+    
+    df[lag_cols + ["naive_3m_prediction"]] = (
+        df[lag_cols + ["naive_3m_prediction"]]
+        .fillna(0)
+        .clip(lower=0, upper=20)
+    )
+    
+    df["has_history"] = (df["item_cnt_month_lag_1"] > 0).astype(int)
+
     logger.info("Naive baseline features added")
 
     return df
@@ -214,6 +256,8 @@ def validate_gold_table(df: pd.DataFrame) -> None:
     required_columns = [
         "date_block_num",
         "shop_id",
+        "city_name",
+        "city_code",
         "item_id",
         "item_cnt_month",
         "item_category_id",
@@ -283,6 +327,7 @@ def main():
         shops = read_silver_table(args.bucket, "shops")
 
         monthly_sales = create_monthly_sales(sales)
+        shops = add_city_feature(shops)
 
         gold_df = merge_tables(
             monthly_sales=monthly_sales,
