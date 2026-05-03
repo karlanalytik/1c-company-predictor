@@ -165,7 +165,8 @@ def clean_table(df: pd.DataFrame, table_name: str, config: dict) -> pd.DataFrame
     logger.info("Casting to the expected data type")
     df = df.astype(config["dtypes"])
     if table_name == "sales":
-        df['date'] = pd.to_datetime(df['date'], format = '%d-%m-%Y')
+        df['date'] = pd.to_datetime(df['date'], format = '%d.%m.%Y')
+        df['date'] = df['date'].dt.strftime('%d-%m-%Y')
 
     logger.info("Removing duplicates")
     before = len(df)
@@ -209,11 +210,15 @@ def write_silver_table(df: pd.DataFrame, bucket: str, table_name: str) -> None:
 
     logger.info(f"Writing {table_name} to {path}")
 
-    # TODO: Add partition(s)
+    partition_cols = None
+    if table_name == 'sales':
+        partition_cols = ['date_block_num']
+        
     wr.s3.to_parquet(
         df=df,
         path=path,
         dataset=True,
+        partition_cols=partition_cols,
         mode="overwrite",
         index=False,
     )
