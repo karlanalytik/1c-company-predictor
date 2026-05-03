@@ -219,3 +219,6 @@ __marimo__/
 
 # data
 data/
+
+# Quarto
+docs/final_report_files

@@ -10,6 +10,7 @@ dependencies = [
     "kagglehub>=1.0.0",
     "numpy>=2.4.4",
     "pandas>=3.0.2",
+    "quarto>=0.1.0",
     "ruff>=0.15.12",
     "scikit-learn>=1.8.0",
 ]
