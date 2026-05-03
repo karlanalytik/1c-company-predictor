@@ -78,7 +78,11 @@ en el README deben poder defender por qué cada uno está ahí.
 ## ERD
 - Link to .drawio file
 - Image (PNG / SVG)
-- Architecture justification
+
+![ERD](docs/diagrams/ERD_1cCompany.png){width="75%"}
+
+[ERD Link](https://drive.google.com/file/d/1AD8gMyTQiBvfQw9bfuljlbslZcRxYDkO/view?usp=sharing)
+
 
 ## Installation and Setup
 
@@ -125,6 +129,26 @@ The script reads the raw CSV files from the Bronze layer, applies basic data val
 
 ```bash
 uv run python elt/silver.py \
+  --bucket your-bucket-name
+```
+
+### Gold Layer Processing
+
+The script reads the clean Parquet tables from the Silver layer, creates a monthly modeling dataset, adds product, shop, and category attributes, and computes modeling features for training and evaluation.
+
+#### What it does
+
+1. Reads Silver Parquet tables from: `s3://<bucket>/sales_predict/silver/`
+2. Aggregates daily sales to monthly shop-item level.
+3. Merges sales with item, category, and shop dimensions.
+4. Creates modeling features.
+5. Adds 3-month naive baseline prediction.
+6. Writes the modeling table to: `s3://<bucket>/sales_predict/gold/modeling_sales/`
+
+#### How to Run
+
+```bash
+uv run python elt/gold.py \
   --bucket your-bucket-name
 ```
 
