@@ -2,18 +2,22 @@
 Gold layer processing script.
 
 Reads Silver Parquet tables from S3, creates a monthly modeling dataset,
-adds product/shop/category attributes, and computes naive baseline features.
+adds product/shop/category attributes, creates modeling features, and computes 
+naive baseline features.
 
 Flow:
 1. Read Silver tables from S3
 2. Aggregate sales to monthly level
 3. Merge sales with item, category and shop dimensions
-4. Add 3-month naive baseline prediction
-5. Write Gold table to: s3://<bucket>/sales_predict/gold/modeling_sales/
+4. Create modeling features
+5. Add 3-month naive baseline prediction
+6. Write Gold table to: s3://<bucket>/sales_predict/gold/modeling_sales/
 """
 
 import argparse
+import datetime
 import logging
+import numpy as np
 
 import awswrangler as wr
 import pandas as pd
@@ -70,7 +74,7 @@ def read_silver_table(bucket: str, table_name: str) -> pd.DataFrame:
     logger.info(f"Reading {table_name} from {path}")
 
     try:
-        return wr.s3.read_parquet(path)
+        return wr.s3.read_parquet(path, dataset=True)
     except Exception as e:
         logger.error(f"Error reading {table_name}: {e}")
         raise
@@ -164,6 +168,39 @@ def add_naive_features(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
+def identify_inactive_items(df: pd.DataFrame, days: int) -> pd.DataFrame:
+    """
+    Identify inactive items based on their last observed sale date.
+
+    An item is marked as inactive when its last sale date is older than the
+    threshold defined by the maximum date in the dataset minus the number of days.
+
+    Args:
+        df (pd.DataFrame): sales DataFrame with item_id and date columns.
+        days (int): inactivity threshold in days.
+
+    Returns:
+        DataFrame with item_id, last_sale_date, and inactive flag.
+    """
+    logger.info("Identifying inactive items")
+    
+    last_sales = (
+        df.groupby("item_id", as_index=False)["date"]
+        .max()
+        .reset_index()
+    )
+
+    last_sales["date"] = pd.to_datetime(last_sales["date"], format = "%d-%m-%Y")
+    
+    last_sale_limit = last_sales["date"].max() - datetime.timedelta(days=days)
+
+    last_sales["inactive"] = np.where(last_sales["date"] <= last_sale_limit, 1, 0)
+
+    logger.info("Inactive item flag created")
+
+    return last_sales
+
+# TODO: Add categorical features
 
 def validate_gold_table(df: pd.DataFrame) -> None:
     """
@@ -183,6 +220,7 @@ def validate_gold_table(df: pd.DataFrame) -> None:
         "item_category_name",
         "shop_name",
         "naive_3m_prediction",
+        "inactive"
     ]
 
     missing = set(required_columns) - set(df.columns)
@@ -215,6 +253,7 @@ def write_gold_table(df: pd.DataFrame, bucket: str, table_name: str) -> None:
         df=df,
         path=path,
         dataset=True,
+        partition_cols=['date_block_num'],
         mode="overwrite",
         index=False,
     )
@@ -253,6 +292,14 @@ def main():
         )
 
         gold_df = add_naive_features(gold_df)
+        
+        inactive_items = identify_inactive_items(sales, days=365)
+
+        gold_df = gold_df.merge(
+            inactive_items[["item_id", "inactive"]],
+            on="item_id",
+            how="left",
+        )
 
         validate_gold_table(gold_df)
 
