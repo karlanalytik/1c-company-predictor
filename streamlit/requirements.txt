@@ -1,0 +1,7 @@
+streamlit
+pandas
+boto3
+awswrangler
+psycopg2-binary
+pyarrow
+altair

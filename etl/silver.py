@@ -1,5 +1,5 @@
 """
-Silver layer ingestion script.
+Silver layer processing script.
 
 Reads raw CSV files from S3 Bronze layer, applies basic validations and
 transformations, and uploads clean Parquet tables to S3 Silver layer.
@@ -165,7 +165,7 @@ def clean_table(df: pd.DataFrame, table_name: str, config: dict) -> pd.DataFrame
     logger.info("Casting to the expected data type")
     df = df.astype(config["dtypes"])
     if table_name == "sales":
-        df['date'] = pd.to_datetime(df['date'], format = '%d-%m-%Y')
+        df['date'] = pd.to_datetime(df['date'], format = '%d.%m.%Y')
 
     logger.info("Removing duplicates")
     before = len(df)
@@ -209,6 +209,7 @@ def write_silver_table(df: pd.DataFrame, bucket: str, table_name: str) -> None:
 
     logger.info(f"Writing {table_name} to {path}")
 
+    # TODO: Add partition(s)
     wr.s3.to_parquet(
         df=df,
         path=path,
@@ -248,6 +249,7 @@ def main():
                 config=config,
             )
 
+            # TODO: Add reagruped / recoded features
             write_silver_table(
                 df=df_clean,
                 bucket=args.bucket,
