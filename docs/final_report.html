@@ -6,6 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Karla Soto / Paulo Escalante">
+<meta name="dcterms.date" content="2026-05-03">
 
 <title>Demand Forecasting App</title>
 <style>
@@ -59,11 +61,6 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#capa-de-datos" id="toc-capa-de-datos" class="nav-link" data-scroll-target="#capa-de-datos">2.3 Capa de datos</a></li>
   <li><a href="#capa-de-machine-learning" id="toc-capa-de-machine-learning" class="nav-link" data-scroll-target="#capa-de-machine-learning">2.4 Capa de Machine Learning</a></li>
-  </ul></li>
-  <li><a href="#screenshots" id="toc-screenshots" class="nav-link" data-scroll-target="#screenshots">Screenshots</a>
-  <ul class="collapse">
-  <li><a href="#diagrama" id="toc-diagrama" class="nav-link" data-scroll-target="#diagrama">Diagrama</a></li>
-  <li><a href="#erd" id="toc-erd" class="nav-link" data-scroll-target="#erd">ERD</a></li>
   <li><a href="#justificación-del-uso-de-herramientas" id="toc-justificación-del-uso-de-herramientas" class="nav-link" data-scroll-target="#justificación-del-uso-de-herramientas">Justificación del uso de herramientas</a></li>
   </ul></li>
   <li><a href="#costos-mensuales" id="toc-costos-mensuales" class="nav-link" data-scroll-target="#costos-mensuales">Costos mensuales</a></li>
@@ -72,6 +69,13 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#tour-de-la-aplicación" id="toc-tour-de-la-aplicación" class="nav-link" data-scroll-target="#tour-de-la-aplicación">Tour de la aplicación</a></li>
   <li><a href="#limitaciones-y-proximos-pasos" id="toc-limitaciones-y-proximos-pasos" class="nav-link" data-scroll-target="#limitaciones-y-proximos-pasos">Limitaciones y proximos pasos</a></li>
   <li><a href="#uso-de-herramientas-de-ia-en-el-proyecto" id="toc-uso-de-herramientas-de-ia-en-el-proyecto" class="nav-link" data-scroll-target="#uso-de-herramientas-de-ia-en-el-proyecto">Uso de herramientas de IA en el proyecto</a></li>
+  </ul></li>
+  <li><a href="#apéndice" id="toc-apéndice" class="nav-link" data-scroll-target="#apéndice">Apéndice</a>
+  <ul class="collapse">
+  <li><a href="#screenshots" id="toc-screenshots" class="nav-link" data-scroll-target="#screenshots">Screenshots</a>
+  <ul class="collapse">
+  <li><a href="#amazon-s3" id="toc-amazon-s3" class="nav-link" data-scroll-target="#amazon-s3">Amazon S3</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -90,7 +94,19 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-title-meta column-page-right">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Karla Soto / Paulo Escalante </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 3, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -102,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="briefing" class="level1">
 <h1>Briefing</h1>
-<p>Necesidades: - Incluir filtro por tienda o categría y ver proyección del próximo periodo (Respuesta en segundos no en minutos) - Archivo con pronósticos del mes siguiente para todos los productos de cada categoría, a veces para todo el catálogo (masivo) <strong>pendiente: lo guarde en un lugar al que él pueda llegar y me avise cuando esté listo</strong> - Agregar cortes por región, por canal. - Disponible en una URL que se pueda abrir desde cualquier equipo de la empresa, siempre disponible. - Presupuesto acotado <strong>falta: estimar costos</strong> - Logging para resolver si hay alguna falla, si el endpoint está caído o si tarda demasiado, saber cuántas veces se ha llamado al modelo. - No almacenamiento local, datos disponibles para su consumo en cualquier lugar y momento. - <strong>Falta: Precisión (evaluación vs groundthruth) y KPIs de los errores de predicciones por grupo de productos y a nivel producto</strong> - Captura del feedback en base de datos, con vista de los mensajes reportados - <strong>falta:</strong> modo <strong>batch</strong> en el que el usuario selecciona un grupo más grande (una categoría completa, todos los productos de una tienda, o el catálogo completo) y el sistema produce el pronóstico para ese grupo <strong>sin degradar la experiencia</strong> del usuario. - considerar latencia, costo, tamaño del input, frecuencia de ejecución y cómo entrega los resultados la UI al usuario - Es posible que tengas que hacer más de un modelo para predecir un grupo de productos. También habrá productos que ya no se vendan y no tenga sentido predecir. - En el ERD <strong>falta: descripción de cada tabla (propósito, quién escribe, quién consume).</strong></p>
+<p>Necesidades: - Incluir filtro por tienda o categría y ver proyección del próximo periodo (Respuesta en segundos no en minutos) - Archivo con pronósticos del mes siguiente para todos los productos de cada categoría, a veces para todo el catálogo (masivo) <strong>pendiente: lo guarde en un lugar al que él pueda llegar y me avise cuando esté listo</strong> - Agregar cortes por región, por canal. - Disponible en una URL que se pueda abrir desde cualquier equipo de la empresa, siempre disponible. - Presupuesto acotado <strong>falta: estimar costos</strong> - Logging para resolver si hay alguna falla, si el endpoint está caído o si tarda demasiado, saber cuántas veces se ha llamado al modelo. - <strong>Falta: Precisión (evaluación vs groundthruth) y KPIs de los errores de predicciones por grupo de productos y a nivel producto</strong> - Captura del feedback en base de datos, con vista de los mensajes reportados - <strong>falta:</strong> modo <strong>batch</strong> en el que el usuario selecciona un grupo más grande (una categoría completa, todos los productos de una tienda, o el catálogo completo) y el sistema produce el pronóstico para ese grupo <strong>sin degradar la experiencia</strong> del usuario. - considerar latencia, costo, tamaño del input, frecuencia de ejecución y cómo entrega los resultados la UI al usuario - Es posible que tengas que hacer más de un modelo para predecir un grupo de productos. También habrá productos que ya no se vendan y no tenga sentido predecir. - En el ERD <strong>falta: descripción de cada tabla (propósito, quién escribe, quién consume).</strong></p>
 </section>
 <section id="introducción" class="level1">
 <h1>1. Introducción</h1>
@@ -151,6 +167,10 @@ ul.task-list li input[type="checkbox"] {
 <li><em>Gold:</em> Tablas analíticas y features utilizadas para entrenamiento e inferencia.</li>
 </ul>
 <p>El catálogo de datos se gestiona mediante <strong>AWS Glue Data Catalog</strong>.</p>
+<section id="erd" class="level4">
+<h4 class="anchored" data-anchor-id="erd">ERD</h4>
+<p><diagrama de="" la="" arquitectura=""></diagrama></p>
+</section>
 </section>
 <section id="capa-de-machine-learning" class="level3">
 <h3 class="anchored" data-anchor-id="capa-de-machine-learning">2.4 Capa de Machine Learning</h3>
@@ -175,18 +195,6 @@ ul.task-list li input[type="checkbox"] {
 <li><p><strong>Amazon SageMaker — Batch Transform (opcional)</strong> — si deciden usarlo como mecanismo para ejecutar inferencia batch desde la app, inclúyanlo en el diagrama y justifíquenlo. Si no lo usan, está bien — pero justifiquen en el reporte la alternativa que escogieron.</p></li>
 <li><p><strong>Pipeline de datos y de ML</strong> — flujo end-to-end desde S3 hasta la predicción mostrada en la UI. Describan cómo ejecutan los modelos desde Streamlit (pre-cómputo, inferencia in-process, Batch Transform, u otro mecanismo) y justifiquen la decisión en términos de latencia, costo y tamaño del input. Incluyan también el manejo de credenciales con Secrets Manager.</p></li>
 </ul>
-</section>
-</section>
-<section id="screenshots" class="level2">
-<h2 class="anchored" data-anchor-id="screenshots">Screenshots</h2>
-<ul>
-<li><strong>Screenshots de los recursos de AWS desplegados</strong> — consola de ECS con el servicio corriendo, CloudFormation stacks en <code>CREATE_COMPLETE</code>, ECR con la imagen publicada, RDS disponible, y el endpoint público de la app abierto en el browser.</li>
-</ul>
-<section id="diagrama" class="level3">
-<h3 class="anchored" data-anchor-id="diagrama">Diagrama</h3>
-</section>
-<section id="erd" class="level3">
-<h3 class="anchored" data-anchor-id="erd">ERD</h3>
 </section>
 <section id="justificación-del-uso-de-herramientas" class="level3">
 <h3 class="anchored" data-anchor-id="justificación-del-uso-de-herramientas">Justificación del uso de herramientas</h3>
@@ -272,6 +280,54 @@ ul.task-list li input[type="checkbox"] {
 <section id="uso-de-herramientas-de-ia-en-el-proyecto" class="level2">
 <h2 class="anchored" data-anchor-id="uso-de-herramientas-de-ia-en-el-proyecto">Uso de herramientas de IA en el proyecto</h2>
 <p>declaración explícita (ver sección de honestidad académica).</p>
+</section>
+</section>
+<section id="apéndice" class="level1">
+<h1>Apéndice</h1>
+<section id="screenshots" class="level2">
+<h2 class="anchored" data-anchor-id="screenshots">Screenshots</h2>
+<section id="amazon-s3" class="level3">
+<h3 class="anchored" data-anchor-id="amazon-s3">Amazon S3</h3>
+<ul>
+<li>Estructura:</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/S3_structure.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>S3 Structure</figcaption>
+</figure>
+</div>
+<ul>
+<li>Capa Bronze:</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/S3_bronze.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>S3 Bronze</figcaption>
+</figure>
+</div>
+<ul>
+<li>Capa Silver:</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/S3_silver.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>S3 Silver</figcaption>
+</figure>
+</div>
+<ul>
+<li>Capa Gold:</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/S3_gold.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>S3 Gold</figcaption>
+</figure>
+</div>
+<ul>
+<li><strong>Screenshots de los recursos de AWS desplegados</strong> — consola de ECS con el servicio corriendo, CloudFormation stacks en <code>CREATE_COMPLETE</code>, ECR con la imagen publicada, RDS disponible, y el endpoint público de la app abierto en el browser.</li>
+</ul>
+</section>
 </section>
 </section>
 

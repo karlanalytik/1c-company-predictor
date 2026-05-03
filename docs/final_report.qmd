@@ -1,8 +1,13 @@
 ---
 title: "Demand Forecasting App"
 subtitle: "MVP Report"
+author: "Karla Soto / Paulo Escalante"
+date: "today"
 theme: cosmo
 format:
+#  pdf:
+#    pdf-engine: xelatex
+#    mainfont: "Arial"
   html:
     toc: true
     toc-location: left
@@ -88,6 +93,10 @@ Para esta capa se implementa un proceso ELT bajo el enfoque medallion (Bronze, S
 
 El catálogo de datos se gestiona mediante **AWS Glue Data Catalog**.
 
+#### ERD
+
+<Diagrama de la arquitectura>
+
 
 ### 2.4 Capa de Machine Learning
 
@@ -127,12 +136,8 @@ A partir del modelo entrenado, se generan predicciones de demanda que se almacen
 
 - **Pipeline de datos y de ML** — flujo end-to-end desde S3 hasta la predicción mostrada en la UI. Describan cómo ejecutan los modelos desde Streamlit (pre-cómputo, inferencia in-process, Batch Transform, u otro mecanismo) y justifiquen la decisión en términos de latencia, costo y tamaño del input. Incluyan también el manejo de credenciales con Secrets Manager.
 
-## Screenshots
-- **Screenshots de los recursos de AWS desplegados** — consola de ECS con el servicio corriendo, CloudFormation stacks en `CREATE_COMPLETE`, ECR con la imagen publicada, RDS disponible, y el endpoint público de la app abierto en el browser.
 
-### Diagrama
 
-### ERD
 
 ### Justificación del uso de herramientas
 
@@ -166,3 +171,29 @@ A partir del modelo entrenado, se generan predicciones de demanda que se almacen
 
 ## Uso de herramientas de IA en el proyecto
 declaración explícita (ver sección de honestidad académica).
+
+
+# Apéndice
+
+## Screenshots
+
+### Amazon S3
+
+* Estructura: 
+
+![S3 Structure](/images/S3_structure.png){width="75%"}
+
+* Capa Bronze: 
+  
+![S3 Bronze](/images/S3_bronze.png){width="75%"}
+
+* Capa Silver: 
+
+![S3 Silver](/images/S3_silver.png){width="75%"}
+
+* Capa Gold: 
+
+![S3 Gold](/images/S3_gold.png){width="75%"}
+
+
+- **Screenshots de los recursos de AWS desplegados** — consola de ECS con el servicio corriendo, CloudFormation stacks en `CREATE_COMPLETE`, ECR con la imagen publicada, RDS disponible, y el endpoint público de la app abierto en el browser.
