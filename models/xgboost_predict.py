@@ -53,10 +53,12 @@ def parse_args():
 FEATURES = [
     "date_block_num",
     "shop_id",
+    #"city_code",
     "item_id",
     "item_category_id",
-    "avg_item_price",
-    "revenue_month",
+    #"main_category_code",
+    #"avg_item_price",
+    #"revenue_month",
     "item_cnt_month_lag_1",
     "item_cnt_month_lag_2",
     "item_cnt_month_lag_3",
@@ -80,7 +82,7 @@ def read_gold_data(bucket: str) -> pd.DataFrame:
 
     logger.info(f"Reading Gold data from {path}")
 
-    return wr.s3.read_parquet(path)
+    return wr.s3.read_parquet(path, dataset=True)
 
 
 def read_test_data(bucket: str) -> pd.DataFrame:
@@ -135,20 +137,24 @@ def create_forecast_dataset(
     last_history["item_cnt_month_lag_2"] = last_history["item_cnt_month_lag_1"]
     last_history["item_cnt_month_lag_1"] = last_history["item_cnt_month"]
 
-    last_history["naive_3m_prediction"] = last_history[
-        [
-            "item_cnt_month_lag_1",
-            "item_cnt_month_lag_2",
-            "item_cnt_month_lag_3",
-        ]
-    ].mean(axis=1)
+    lag_cols = [
+        "item_cnt_month_lag_1",
+        "item_cnt_month_lag_2",
+        "item_cnt_month_lag_3",
+    ]
+
+    last_history[lag_cols] = last_history[lag_cols].fillna(0).clip(lower=0, upper=20)
+
+    last_history["naive_3m_prediction"] = last_history[lag_cols].mean(axis=1)
 
     feature_cols = [
         "shop_id",
         "item_id",
+        "city_code",
         "item_category_id",
-        "avg_item_price",
-        "revenue_month",
+        "main_category_code",
+        "inactive",
+        "item_cnt_month",
         "item_cnt_month_lag_1",
         "item_cnt_month_lag_2",
         "item_cnt_month_lag_3",
@@ -166,10 +172,9 @@ def create_forecast_dataset(
     missing_rows = forecast_df[FEATURES].isna().any(axis=1).sum()
 
     if missing_rows > 0:
-        logger.warning(f"Dropping {missing_rows} rows with missing features")
-        forecast_df = forecast_df.dropna(subset=FEATURES)
+        logger.warning(f"Filling {missing_rows} rows with missing features")
 
-    logger.info(f"Forecast dataset created: {len(forecast_df)} rows")
+    forecast_df[FEATURES] = forecast_df[FEATURES].fillna(0)
 
     return forecast_df
 
@@ -183,7 +188,10 @@ def generate_predictions(model, forecast_df: pd.DataFrame) -> pd.DataFrame:
     predictions = forecast_df.copy()
 
     predictions["prediction"] = model.predict(predictions[FEATURES])
-    predictions["prediction"] = predictions["prediction"].clip(lower=0)
+    predictions["prediction"] = predictions["prediction"].clip(lower=0, upper=20)
+
+    if "inactive" in predictions.columns:
+        predictions.loc[predictions["inactive"] == 1, "prediction"] = 0
     predictions["model_name"] = MODEL_NAME
 
     return predictions
@@ -202,6 +210,9 @@ def save_predictions_to_s3(predictions: pd.DataFrame, bucket: str) -> None:
         "shop_id",
         "item_id",
         "item_category_id",
+        "main_category_code",
+        "city_code",
+        "inactive",
         "date_block_num",
         "prediction",
         "model_name",

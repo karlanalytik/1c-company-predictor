@@ -137,6 +137,34 @@ def add_city_feature(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
+def add_main_category_feature(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Extract main category from item_category_name and encode it as a numeric feature.
+    """
+    df = df.copy()
+
+    df["main_category"] = (
+        df["item_category_name"]
+        .str.strip()
+        .str.split(" - ")
+        .str[0]
+    )
+
+    category_mapping = {
+        "Игры Android": "Игры",
+        "Игры MAC": "Игры",
+        "Карты оплаты (Кино, Музыка, Игры)": "Карты оплаты",
+        "Чистые носители (шпиль)": "Чистые носители",
+        "Чистые носители (штучные)": "Чистые носители",
+        "Билеты (Цифра)": "Билеты",
+    }
+
+    df["main_category_name"] = df["main_category"].replace(category_mapping)
+
+    df["main_category_code"] = df["main_category"].astype("category").cat.codes
+
+    return df
+
 def merge_tables(
     monthly_sales: pd.DataFrame,
     items: pd.DataFrame,
@@ -197,6 +225,7 @@ def add_naive_features(df: pd.DataFrame) -> pd.DataFrame:
     lag_cols = []
     for lag in [1, 2, 3]:
         col = f"item_cnt_month_lag_{lag}"
+        lag_cols.append(col)
     
     df[lag_cols + ["naive_3m_prediction"]] = (
         df[lag_cols + ["naive_3m_prediction"]]
@@ -242,7 +271,6 @@ def identify_inactive_items(df: pd.DataFrame, days: int) -> pd.DataFrame:
 
     return last_sales
 
-# TODO: Add categorical features
 
 def validate_gold_table(df: pd.DataFrame) -> None:
     """
@@ -262,6 +290,8 @@ def validate_gold_table(df: pd.DataFrame) -> None:
         "item_cnt_month",
         "item_category_id",
         "item_category_name",
+        "main_category_code",
+        "main_category_name",
         "shop_name",
         "naive_3m_prediction",
         "inactive"
@@ -328,6 +358,7 @@ def main():
 
         monthly_sales = create_monthly_sales(sales)
         shops = add_city_feature(shops)
+        item_categories = add_main_category_feature(item_categories)
 
         gold_df = merge_tables(
             monthly_sales=monthly_sales,

@@ -12,9 +12,8 @@ from pathlib import Path
 
 import awswrangler as wr
 import joblib
-import numpy as np
 import pandas as pd
-from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.metrics import mean_absolute_error, root_mean_squared_error
 from xgboost import XGBRegressor
 
 
@@ -41,7 +40,7 @@ def parse_args():
         Namespace with:
             - bucket (str): target S3 bucket
     """
-    parser = argparse.ArgumentParser(description="Train simple XGBoost model")
+    parser = argparse.ArgumentParser(description="Train XGBoost model")
 
     parser.add_argument("--bucket", required=True, help="S3 bucket name")
 
@@ -55,9 +54,10 @@ def parse_args():
 FEATURES = [
     "date_block_num",
     "shop_id",
-    "city_code",
+    #"city_code",
     "item_id",
     "item_category_id",
+    #"main_category_code",
     #"avg_item_price",
     #"revenue_month",
     "item_cnt_month_lag_1",
@@ -106,7 +106,7 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
     """
     logger.info("Preparing training data")
 
-    required_cols = FEATURES + [TARGET, "inactive"]
+    required_cols = FEATURES + [TARGET, "inactive", "city_code", "main_category_code"]
     missing = set(required_cols) - set(df.columns)
 
     if missing:
@@ -115,7 +115,9 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df[required_cols].copy()
     df = df[df["inactive"] == 0]
+    logger.info(f"Rows before dropna: {len(df)}")
     df = df.dropna()
+    logger.info(f"Rows after dropna: {len(df)}")
     df['date_block_num'] = df['date_block_num'].astype(int)
 
     logger.info(f"Training data prepared: {len(df)} rows")
@@ -125,7 +127,7 @@ def prepare_data(df: pd.DataFrame) -> pd.DataFrame:
 
 def train_model(df: pd.DataFrame) -> tuple[XGBRegressor, pd.DataFrame]:
     """
-    Train a simple XGBoost model.
+    Train a XGBoost model.
 
     Args:
         df (pd.DataFrame): modeling DataFrame
@@ -180,10 +182,10 @@ def evaluate_backtesting(predictions: pd.DataFrame) -> pd.DataFrame:
     y_naive = predictions["naive_3m_prediction"].clip(lower=0, upper=20)
 
     mae_model = mean_absolute_error(y_true, y_pred)
-    rmse_model = mean_squared_error(y_true, y_pred) ** 0.5
+    rmse_model = root_mean_squared_error(y_true, y_pred)
 
     mae_naive = mean_absolute_error(y_true, y_naive)
-    rmse_naive = mean_squared_error(y_true, y_naive) ** 0.5
+    rmse_naive = root_mean_squared_error(y_true, y_naive)
 
     metrics = pd.DataFrame(
         [
@@ -203,6 +205,56 @@ def evaluate_backtesting(predictions: pd.DataFrame) -> pd.DataFrame:
     logger.info(f"Backtesting metrics:\n{metrics.to_string(index=False)}")
 
     return metrics
+
+
+def evaluate_backtesting_by_group(predictions: pd.DataFrame,
+group_cols: list[str],
+) -> pd.DataFrame:
+    """
+    Compute backtesting metrics by group.
+    """
+    logger.info(f"Evaluating backtesting by {group_cols}")
+
+    df = predictions.copy()
+
+    df[TARGET] = df[TARGET].clip(lower=0, upper=20)
+    df["prediction"] = df["prediction"].clip(lower=0, upper=20)
+    df["naive_3m_prediction"] = df["naive_3m_prediction"].clip(lower=0, upper=20)
+
+    rows = []
+
+    for group_values, group_df in df.groupby(group_cols):
+        if not isinstance(group_values, tuple):
+            group_values = (group_values,)
+
+        y_true = group_df[TARGET]
+        y_pred = group_df["prediction"]
+        y_naive = group_df["naive_3m_prediction"]
+
+        mae_model = mean_absolute_error(y_true, y_pred)
+        rmse_model = root_mean_squared_error(y_true, y_pred)
+
+        mae_naive = mean_absolute_error(y_true, y_naive)
+        rmse_naive = root_mean_squared_error(y_true, y_naive)
+
+        row = {
+            "model_name": MODEL_NAME,
+            "backtest_month": BACKTEST_MONTH,
+            "n_rows": len(group_df),
+            "mae_model": mae_model,
+            "rmse_model": rmse_model,
+            "mae_naive": mae_naive,
+            "rmse_naive": rmse_naive,
+            "mae_improvement": mae_naive - mae_model,
+            "rmse_improvement": rmse_naive - rmse_model,
+        }
+
+        for col, value in zip(group_cols, group_values):
+            row[col] = value
+
+        rows.append(row)
+
+    return pd.DataFrame(rows)
 
 
 def save_model_to_s3(model: XGBRegressor, bucket: str) -> None:
@@ -255,13 +307,24 @@ def save_backtest_predictions_to_s3(
     )
 
 
-def save_metrics_to_s3(metrics: pd.DataFrame, bucket: str) -> None:
-    output_path = f"s3://{bucket}/sales_predict/artifacts/metrics_{MODEL_NAME}.csv"
+def save_metrics_to_s3(df: pd.DataFrame, bucket: str, name: str) -> None:
+    """
+    Save any metrics DataFrame to S3.
+
+    Args:
+        df (pd.DataFrame): metrics DataFrame
+        bucket (str): target S3 bucket
+        name (str): file suffix (e.g. "global", "by_item_category")
+    """
+    output_path = (
+        f"s3://{bucket}/sales_predict/artifacts/"
+        f"{MODEL_NAME}_{name}.csv"
+    )
 
     logger.info(f"Writing metrics to {output_path}")
 
     wr.s3.to_csv(
-        df=metrics,
+        df=df,
         path=output_path,
         index=False,
     )
@@ -318,10 +381,19 @@ def main():
         model, predictions = train_model(modeling_df)
 
         metrics = evaluate_backtesting(predictions)
+        metrics_by_item_category = evaluate_backtesting_by_group(
+            predictions,
+            group_cols=["item_category_id"])
+        metrics_by_main_category = evaluate_backtesting_by_group(
+            predictions,
+            group_cols=["main_category_code"]
+            )
 
         save_model_to_s3(model, args.bucket)
         save_backtest_predictions_to_s3(predictions, args.bucket)
-        save_metrics_to_s3(metrics, args.bucket)
+        save_metrics_to_s3(metrics, args.bucket, "global")
+        save_metrics_to_s3(metrics_by_item_category, args.bucket, "category")
+        save_metrics_to_s3(metrics_by_main_category, args.bucket, "main_category")
         save_feature_importance_to_s3(model, args.bucket)
 
     except Exception:
