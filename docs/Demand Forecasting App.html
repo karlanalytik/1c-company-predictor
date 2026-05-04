@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.8.27">
@@ -11,7 +10,7 @@
 <meta name="dcterms.date" content="2026-05-03">
 
 <title>Demand Forecasting App</title>
-<style class="anchorjs"></style><style>
+<style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -26,18 +25,21 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="Demand%20Forecasting%20App_files/clipboard.min.js"></script>
-<script src="Demand%20Forecasting%20App_files/quarto.js" type="module"></script>
-<script src="Demand%20Forecasting%20App_files/tabsets.js" type="module"></script>
-<script src="Demand%20Forecasting%20App_files/axe-check.js" type="module"></script>
-<script src="Demand%20Forecasting%20App_files/popper.min.js"></script>
-<script src="Demand%20Forecasting%20App_files/tippy.umd.min.js"></script>
-<script src="Demand%20Forecasting%20App_files/anchor.min.js"></script>
-<link href="Demand%20Forecasting%20App_files/tippy.css" rel="stylesheet">
-<link href="Demand%20Forecasting%20App_files/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="Demand%20Forecasting%20App_files/bootstrap.min.js"></script>
-<link href="Demand%20Forecasting%20App_files/bootstrap-icons.css" rel="stylesheet">
-<link href="Demand%20Forecasting%20App_files/bootstrap-82eac07570d2056c6c0099389084f61d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="final_report_files/libs/clipboard/clipboard.min.js"></script>
+<script src="final_report_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="final_report_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="final_report_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="final_report_files/libs/quarto-html/popper.min.js"></script>
+<script src="final_report_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="final_report_files/libs/quarto-html/anchor.min.js"></script>
+<link href="final_report_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="final_report_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="final_report_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="final_report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="final_report_files/libs/bootstrap/bootstrap-82eac07570d2056c6c0099389084f61d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -50,29 +52,34 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#briefing" id="toc-briefing" class="nav-link active" data-scroll-target="#briefing">Briefing</a></li>
-  <li><a href="#introducción" id="toc-introducción" class="nav-link" data-scroll-target="#introducción">1. Introducción</a>
-  <ul class="collapse">
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">1. Introducción</a>
+  <ul>
   <li><a href="#descripción-del-problema-de-negocio" id="toc-descripción-del-problema-de-negocio" class="nav-link" data-scroll-target="#descripción-del-problema-de-negocio">1.1. Descripción del problema de negocio</a></li>
   <li><a href="#objetivo" id="toc-objetivo" class="nav-link" data-scroll-target="#objetivo">1.2 Objetivo</a></li>
   </ul></li>
   <li><a href="#solución-propuesta" id="toc-solución-propuesta" class="nav-link" data-scroll-target="#solución-propuesta">2. Solución propuesta</a>
+  <ul>
+  <li><a href="#arquitectura" id="toc-arquitectura" class="nav-link" data-scroll-target="#arquitectura">2.1 Arquitectura</a></li>
+  <li><a href="#capa-de-datos" id="toc-capa-de-datos" class="nav-link" data-scroll-target="#capa-de-datos">2.2 Capa de datos</a>
   <ul class="collapse">
-  <li><a href="#arquitectura" id="toc-arquitectura" class="nav-link" data-scroll-target="#arquitectura">2.1 Arquitectura</a>
-  <ul class="collapse">
-  <li><a href="#capa-de-datos" id="toc-capa-de-datos" class="nav-link" data-scroll-target="#capa-de-datos">2.3 Capa de datos</a></li>
-  <li><a href="#capa-de-machine-learning" id="toc-capa-de-machine-learning" class="nav-link" data-scroll-target="#capa-de-machine-learning">2.4 Capa de Machine Learning</a></li>
-  <li><a href="#justificación-del-uso-de-herramientas" id="toc-justificación-del-uso-de-herramientas" class="nav-link" data-scroll-target="#justificación-del-uso-de-herramientas">Justificación del uso de herramientas</a></li>
+  <li><a href="#erd" id="toc-erd" class="nav-link" data-scroll-target="#erd">ERD</a></li>
   </ul></li>
-  <li><a href="#costos-mensuales" id="toc-costos-mensuales" class="nav-link" data-scroll-target="#costos-mensuales">Costos mensuales</a></li>
-  <li><a href="#reentrenamiento" id="toc-reentrenamiento" class="nav-link" data-scroll-target="#reentrenamiento">Reentrenamiento</a></li>
-  <li><a href="#precisión-evaluación-vs-groundthruth-y-kpis-de-los-errores-de-predicciones" id="toc-precisión-evaluación-vs-groundthruth-y-kpis-de-los-errores-de-predicciones" class="nav-link" data-scroll-target="#precisión-evaluación-vs-groundthruth-y-kpis-de-los-errores-de-predicciones">Precisión (evaluación vs groundthruth) y KPIs de los errores de predicciones</a></li>
-  <li><a href="#tour-de-la-aplicación" id="toc-tour-de-la-aplicación" class="nav-link" data-scroll-target="#tour-de-la-aplicación">Tour de la aplicación</a></li>
-  <li><a href="#limitaciones-y-proximos-pasos" id="toc-limitaciones-y-proximos-pasos" class="nav-link" data-scroll-target="#limitaciones-y-proximos-pasos">Limitaciones y proximos pasos</a></li>
-  <li><a href="#uso-de-herramientas-de-ia-en-el-proyecto" id="toc-uso-de-herramientas-de-ia-en-el-proyecto" class="nav-link" data-scroll-target="#uso-de-herramientas-de-ia-en-el-proyecto">Uso de herramientas de IA en el proyecto</a></li>
+  <li><a href="#capa-de-machine-learning" id="toc-capa-de-machine-learning" class="nav-link" data-scroll-target="#capa-de-machine-learning">2.3 Capa de Machine Learning</a></li>
+  <li><a href="#justificación-del-uso-de-herramientas" id="toc-justificación-del-uso-de-herramientas" class="nav-link" data-scroll-target="#justificación-del-uso-de-herramientas">2.4 Justificación del uso de herramientas</a></li>
+  <li><a href="#costos-mensuales" id="toc-costos-mensuales" class="nav-link" data-scroll-target="#costos-mensuales">2.5 Costos mensuales</a></li>
+  <li><a href="#reentrenamiento" id="toc-reentrenamiento" class="nav-link" data-scroll-target="#reentrenamiento">2.6 Reentrenamiento</a></li>
+  <li><a href="#métricas-de-desempeño-del-modelo" id="toc-métricas-de-desempeño-del-modelo" class="nav-link" data-scroll-target="#métricas-de-desempeño-del-modelo">3. Métricas de desempeño del modelo</a>
+  <ul class="collapse">
+  <li><a href="#métricas-globales" id="toc-métricas-globales" class="nav-link" data-scroll-target="#métricas-globales">3.1 Métricas globales</a></li>
+  <li><a href="#métricas-a-nivel-categoría-principal" id="toc-métricas-a-nivel-categoría-principal" class="nav-link" data-scroll-target="#métricas-a-nivel-categoría-principal">3.2 Métricas a nivel categoría principal</a></li>
+  <li><a href="#métricas-a-nivel-categoría" id="toc-métricas-a-nivel-categoría" class="nav-link" data-scroll-target="#métricas-a-nivel-categoría">3.3 Métricas a nivel categoría</a></li>
+  </ul></li>
+  <li><a href="#tour-de-la-aplicación" id="toc-tour-de-la-aplicación" class="nav-link" data-scroll-target="#tour-de-la-aplicación">4. Tour de la aplicación</a></li>
+  <li><a href="#limitaciones-y-proximos-pasos" id="toc-limitaciones-y-proximos-pasos" class="nav-link" data-scroll-target="#limitaciones-y-proximos-pasos">5. Limitaciones y proximos pasos</a></li>
+  <li><a href="#uso-de-herramientas-de-ia-en-el-proyecto" id="toc-uso-de-herramientas-de-ia-en-el-proyecto" class="nav-link" data-scroll-target="#uso-de-herramientas-de-ia-en-el-proyecto">6. Uso de herramientas de IA en el proyecto</a></li>
   </ul></li>
   <li><a href="#apéndice" id="toc-apéndice" class="nav-link" data-scroll-target="#apéndice">Apéndice</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#screenshots" id="toc-screenshots" class="nav-link" data-scroll-target="#screenshots">Screenshots</a>
   <ul class="collapse">
   <li><a href="#amazon-s3" id="toc-amazon-s3" class="nav-link" data-scroll-target="#amazon-s3">Amazon S3</a></li>
@@ -117,44 +124,13 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="briefing" class="level1">
-<h1>Briefing</h1>
-<p>Necesidades: - Incluir filtro por tienda o categría y ver proyección 
-del próximo periodo (Respuesta en segundos no en minutos) - Archivo con 
-pronósticos del mes siguiente para todos los productos de cada 
-categoría, a veces para todo el catálogo (masivo) <strong>pendiente: lo guarde en un lugar al que él pueda llegar y me avise cuando esté listo</strong>
- - Agregar cortes por región, por canal. - Disponible en una URL que se 
-pueda abrir desde cualquier equipo de la empresa, siempre disponible. - 
-Presupuesto acotado <strong>falta: estimar costos</strong> - Logging 
-para resolver si hay alguna falla, si el endpoint está caído o si tarda 
-demasiado, saber cuántas veces se ha llamado al modelo. - <strong>Falta: Precisión (evaluación vs groundthruth) y KPIs de los errores de predicciones por grupo de productos y a nivel producto</strong> - Captura del feedback en base de datos, con vista de los mensajes reportados - <strong>falta:</strong> modo <strong>batch</strong>
- en el que el usuario selecciona un grupo más grande (una categoría 
-completa, todos los productos de una tienda, o el catálogo completo) y 
-el sistema produce el pronóstico para ese grupo <strong>sin degradar la experiencia</strong>
- del usuario. - considerar latencia, costo, tamaño del input, frecuencia
- de ejecución y cómo entrega los resultados la UI al usuario - Es 
-posible que tengas que hacer más de un modelo para predecir un grupo de 
-productos. También habrá productos que ya no se vendan y no tenga 
-sentido predecir.</p>
-</section>
 <section id="introducción" class="level1">
 <h1>1. Introducción</h1>
 <section id="descripción-del-problema-de-negocio" class="level2">
-<h2 class="anchored" data-anchor-id="descripción-del-problema-de-negocio">1.1. Descripción del problema de negocio<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#descripción-del-problema-de-negocio" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
-<p>La compañía 1C Company cuenta con una amplia gama de productos y una 
-red de puntos de venta que requieren de un alto nivel de planeación para
- estimar la demanda futura y así garantizar el abastecimiento de sus 
-tiendas, tomar decisiones financieras y generar estrategias de ventas, 
-como promociones y activaciones en punto de venta.</p>
-<p>Actualmente, el acceso a los datos históricos de las ventas y la 
-generación de forecasts mensuales no están automatizados, lo que genera 
-dependencia de procesos manuales para la generación de reportes, los 
-archivos para el área financiera y en el análisis exploratorio por parte
- de los equipos operativos.</p>
-<p>Además, los distintos equipos (Planeación, Finanzas y Operaciones) 
-requieren autonomía para consultar y analizar la información con 
-distintos niveles de agregación (producto, categoría, tienda, región y 
-canal), sin depender directamente de equipos técnicos.</p>
+<h2 class="anchored" data-anchor-id="descripción-del-problema-de-negocio">1.1. Descripción del problema de negocio</h2>
+<p>La compañía 1C Company cuenta con una amplia gama de productos y una red de puntos de venta que requieren de un alto nivel de planeación para estimar la demanda futura y así garantizar el abastecimiento de sus tiendas, tomar decisiones financieras y generar estrategias de ventas, como promociones y activaciones en punto de venta.</p>
+<p>Actualmente, el acceso a los datos históricos de las ventas y la generación de forecasts mensuales no están automatizados, lo que genera dependencia de procesos manuales para la generación de reportes, los archivos para el área financiera y en el análisis exploratorio por parte de los equipos operativos.</p>
+<p>Además, los distintos equipos (Planeación, Finanzas y Operaciones) requieren autonomía para consultar y analizar la información con distintos niveles de agregación (producto, categoría, tienda, región y canal), sin depender directamente de equipos técnicos.</p>
 <p>Por lo anterior, existe la necesidad de construir una solución que permita:</p>
 <ul>
 <li>Centralizar los datos de ventas y pronósticos.</li>
@@ -163,30 +139,17 @@ canal), sin depender directamente de equipos técnicos.</p>
 </ul>
 </section>
 <section id="objetivo" class="level2">
-<h2 class="anchored" data-anchor-id="objetivo">1.2 Objetivo<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#objetivo" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
-<p>Construir el MVP de un producto de datos enteramente contenido en la 
-nube que, a través de una interfás de usuario, permita a los equipos de 
-Planeación, Finanzas y Operaciones, así como personal Directivo, acceder
- a los datos de ventas y forecasts con horizontes de un mes y distintos 
-niveles de agregación: producto, categoría, tienda, región y canal, 
-desde cualquier equipo de cómputo en la empresa, en cualquier momento, a
- un costo bajo.</p>
+<h2 class="anchored" data-anchor-id="objetivo">1.2 Objetivo</h2>
+<p>Construir el MVP de un producto de datos enteramente contenido en la nube que, a través de una interfás de usuario, permita a los equipos de Planeación, Finanzas y Operaciones, así como personal Directivo, acceder a los datos de ventas y forecasts con horizontes de un mes y distintos niveles de agregación: producto, categoría, tienda, región y canal, desde cualquier equipo de cómputo en la empresa, en cualquier momento, a un costo bajo.</p>
 <p>El producto deberá permitir:</p>
 <ul>
-<li><strong>La exploración interactiva:</strong> Los usuarios podrán 
-filtrar la información por distintos niveles de agregación (producto, 
-categoría, tienda, región y canal) y visualizar los pronósticos junto 
-con métricas clave de desempeño.</li>
-<li><strong>La generación de reprtes para negocio:</strong> Permitir la 
-descarga bajo demanda de archivos con pronósticos agregados (por 
-ejemplo, a nivel categoría o catálogo completo), los cuales estarán 
-almacenados en una ubicación accesible.</li>
+<li><strong>La exploración interactiva:</strong> Los usuarios podrán filtrar la información por distintos niveles de agregación (producto, categoría, tienda, región y canal) y visualizar los pronósticos junto con métricas clave de desempeño.</li>
+<li><strong>La generación de reprtes para negocio:</strong> Permitir la descarga bajo demanda de archivos con pronósticos agregados (por ejemplo, a nivel categoría o catálogo completo), los cuales estarán almacenados en una ubicación accesible.</li>
 <li><strong>El consumo analítico:</strong> Facilitar el acceso a los datos de pronósticos y métricas para su uso en análisis adicionales por parte de equipos de BI.</li>
 </ul>
 <p>Adicionalmente, el MVP deberá:</p>
 <ul>
-<li>Contar con un mecanismo para capturar retroalimentación del negocio 
-sobre productos o categorías con fallas o comportamientos atípicos.</li>
+<li>Contar con un mecanismo para capturar retroalimentación del negocio sobre productos o categorías con fallas o comportamientos atípicos.</li>
 <li>Garantizar tiempos de respuesta adecuados en la exploración interactiva (segundos).</li>
 <li>Mantener un costo de operación acotado, de manera que sea competitivo frente a los procesos manuales actuales.</li>
 </ul>
@@ -194,26 +157,19 @@ sobre productos o categorías con fallas o comportamientos atípicos.</li>
 </section>
 <section id="solución-propuesta" class="level1">
 <h1>2. Solución propuesta</h1>
-<p>Con la finalidad de atender las necesidades del cliente, se propone 
-desarrollar una aplicación de Streamlit desplegada en AWS con una URL 
-pública accesible desde cualquier navegador en equipos de cómputo de la 
-1C Company. Esta aplicación permite separar en capas el almacenamiento 
-de datos, el procesamiento analítico y la capa de consumo, lo que 
-facilita su escalabilidad y mantenibilidad, al tiempo que mantiene su 
-disponibilidad.</p>
+<p>Con la finalidad de atender las necesidades del cliente, se propone desarrollar una aplicación de Streamlit desplegada en AWS con una URL pública accesible desde cualquier navegador en equipos de cómputo de la 1C Company. Esta aplicación permite separar en capas el almacenamiento de datos, el procesamiento analítico y la capa de consumo, lo que facilita su escalabilidad y mantenibilidad, al tiempo que mantiene su disponibilidad.</p>
 <section id="arquitectura" class="level2">
-<h2 class="anchored" data-anchor-id="arquitectura">2.1 Arquitectura<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#arquitectura" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
+<h2 class="anchored" data-anchor-id="arquitectura">2.1 Arquitectura</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Demand%20Forecasting%20App_files/Arquitectura.jpeg" class="img-fluid figure-img"></p>
+<p><img src="diagrams/Arquitectura.jpeg" class="img-fluid figure-img"></p>
 <figcaption>Arquitectura</figcaption>
 </figure>
 </div>
-<section id="capa-de-datos" class="level3">
-<h3 class="anchored" data-anchor-id="capa-de-datos">2.3 Capa de datos<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#capa-de-datos" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h3>
-<p>Los datos de ventas históricas (entrenamiento) se consumen desde una 
-ubicación indicada por el cliente mediante su API (en este ejemplo se 
-extraen de Kaggle) mediante acceso autenticado, gestionado a través de <strong>AWS Secrets Manager</strong>. Una vez ingeridos, se almacenan en <strong>Amazon S3</strong>.</p>
+</section>
+<section id="capa-de-datos" class="level2">
+<h2 class="anchored" data-anchor-id="capa-de-datos">2.2 Capa de datos</h2>
+<p>Los datos de ventas históricas (entrenamiento) se consumen desde una ubicación indicada por el cliente mediante su API (en este ejemplo se extraen de Kaggle) mediante acceso autenticado, gestionado a través de <strong>AWS Secrets Manager</strong>. Una vez ingeridos, se almacenan en <strong>Amazon S3</strong>.</p>
 <p>Para esta capa se implementa un proceso ELT bajo el enfoque medallion (Bronze, Silver, Gold):</p>
 <ul>
 <li><em>Bronze:</em> Datos crudos de ventas en formato CSV.</li>
@@ -221,19 +177,19 @@ extraen de Kaggle) mediante acceso autenticado, gestionado a través de <strong>
 <li><em>Gold:</em> Tablas analíticas y features utilizadas para entrenamiento e inferencia.</li>
 </ul>
 <p>El catálogo de datos se gestiona mediante <strong>AWS Glue Data Catalog</strong>.</p>
-<section id="erd" class="level4">
-<h4 class="anchored" data-anchor-id="erd">ERD<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#erd" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h4>
+<section id="erd" class="level3">
+<h3 class="anchored" data-anchor-id="erd">ERD</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Demand%20Forecasting%20App_files/ERD_1cCompany.png" class="img-fluid figure-img"></p>
+<p><img src="diagrams/ERD_1cCompany.png" class="img-fluid figure-img"></p>
 <figcaption>ERD</figcaption>
 </figure>
 </div>
 </section>
 </section>
-<section id="capa-de-machine-learning" class="level3">
-<h3 class="anchored" data-anchor-id="capa-de-machine-learning">2.4 Capa de Machine Learning<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#capa-de-machine-learning" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h3>
-<p>El entrenamiento y evaluación del modelo se realiza mediante <strong>Amazon SageMaker</strong> Pipelines, que incluyen:</p>
+<section id="capa-de-machine-learning" class="level2">
+<h2 class="anchored" data-anchor-id="capa-de-machine-learning">2.3 Capa de Machine Learning</h2>
+<p>El entrenamiento y evaluación del modelo se realiza mediante <strong>Amazon SageMaker</strong>, incluyendo:</p>
 <ul>
 <li>Procesamiento de datos</li>
 <li>Entrenamiento del modelo</li>
@@ -242,35 +198,12 @@ extraen de Kaggle) mediante acceso autenticado, gestionado a través de <strong>
 <p>Las métricas generadas se almacenan en <strong>Amazon S3</strong>, y el modelo seleccionado se registra en <strong>SageMaker Model Registry</strong> para su versionamiento y futura reutilización.</p>
 <p>A partir del modelo entrenado, se generan predicciones de demanda que se almacenan en <strong>S3</strong> como tablas de consumo.</p>
 <ul>
-<li><p>Posteriormente, en <strong>Amazon SageMaker</strong> se realiza 
-el entrenamiento y evaluación del modelo. En S3 se escriben las métricas
- resultantes. Se hace el registro del modelo que se llevará a producción
- en <strong>Glue</strong>. Para después generar las tablas de predicciones que se rtegistran en S3.</p></li>
-<li><p>aplicación de Streamlit desplegada en AWS con una URL pública accesible desde cualquier browser.</p></li>
-<li><p>Pre-computar los pronósticos offline (p.&nbsp;ej. en un job 
-programado o un notebook) y guardarlos como tabla en S3/Athena o RDS; 
-Streamlit solo los lee.</p></li>
-<li><p><strong>Amazon ECS (Fargate)</strong></p></li>
-<li><p><strong>Amazon ECR</strong></p></li>
-<li><p><strong>Amazon RDS</strong> — aunque sea para un subconjunto de 
-datos operacionales (catálogos, metadata del POC, estado de jobs, 
-feedback de negocio, lo que ustedes decidan)</p></li>
-<li><p><strong>AWS CloudFormation</strong> — para el despliegue de la capa de infraestructura persistente del POC (la app y la base de datos), no a mano desde la consola</p></li>
-<li><p><strong>AWS Secrets Manager</strong> — para gestionar las credenciales de la base de datos que lea su aplicación.</p></li>
-<li><p><strong>Amazon SageMaker — Batch Transform (opcional)</strong> — 
-si deciden usarlo como mecanismo para ejecutar inferencia batch desde la
- app, inclúyanlo en el diagrama y justifíquenlo. Si no lo usan, está 
-bien — pero justifiquen en el reporte la alternativa que escogieron.</p></li>
-<li><p><strong>Pipeline de datos y de ML</strong> — flujo end-to-end 
-desde S3 hasta la predicción mostrada en la UI. Describan cómo ejecutan 
-los modelos desde Streamlit (pre-cómputo, inferencia in-process, Batch 
-Transform, u otro mecanismo) y justifiquen la decisión en términos de 
-latencia, costo y tamaño del input. Incluyan también el manejo de 
-credenciales con Secrets Manager.</p></li>
+<li><p>Para este MVP se optó por un esquema de pronósticos pre-computados offline al inicio del periodo. Este esquema permite ahorrar costos pues sólo se corre una vez al mes a través de un Notebook programado de manera mensual (<strong>Pipeline de datos y de ML</strong> ). Una ventaja es que al contar con los datos precalculados en la aplicación, la latencia se reduce considerablemente.</p></li>
+<li><p>Todo el código se cuenta con logging detallado, lo que permite identificar y comprender fallas o problemas en el flujo de la pipeline.</p></li>
 </ul>
 </section>
-<section id="justificación-del-uso-de-herramientas" class="level3">
-<h3 class="anchored" data-anchor-id="justificación-del-uso-de-herramientas">Justificación del uso de herramientas<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#justificación-del-uso-de-herramientas" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h3>
+<section id="justificación-del-uso-de-herramientas" class="level2">
+<h2 class="anchored" data-anchor-id="justificación-del-uso-de-herramientas">2.4 Justificación del uso de herramientas</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 40%">
@@ -285,112 +218,389 @@ credenciales con Secrets Manager.</p></li>
 <tbody>
 <tr class="odd">
 <td><strong>Amazon S3</strong></td>
-<td>En el briefing, el cliente solicitó contar con un espacio de 
-almacenamiento seguro y persistido fuera de la aplicación, de forma que 
-los datos estén disponibles aunque la aplicación esté apagada. Además, 
-S3 permite almacenar los datos crudos en su formato original (CSV), así 
-como datos transformados (tabulares), modelos y otros artefactos; es 
-decir, no sólo recibe datos estructurados y con esquema. POr otra parte,
- al ser un servicio escalable y de bajo costo, se alinea con el objetivo
- de mantener un presupuesto acotado. Finalmente, como que las 
-predicciones se generan de forma mensual y no se requiere acceso 
-transaccional, S3 es una buena herramiebnta para este proyecto.</td>
+<td>En el briefing, el cliente solicitó contar con un espacio de almacenamiento seguro y persistido fuera de la aplicación, de forma que los datos estén disponibles aunque la aplicación esté apagada. Además, S3 permite almacenar los datos crudos en su formato original (CSV), así como datos transformados (tabulares), modelos y otros artefactos; es decir, no sólo recibe datos estructurados y con esquema. POr otra parte, al ser un servicio escalable y de bajo costo, se alinea con el objetivo de mantener un presupuesto acotado. Finalmente, como que las predicciones se generan de forma mensual y no se requiere acceso transaccional, S3 es una buena herramiebnta para este proyecto.</td>
 </tr>
 <tr class="even">
-<td>AWS Secrets Manager</td>
-<td>El acceso a los datos del cliente, tanto para su extracción como 
-para la conexión con servicios como la base de datos, requiere un manejo
- seguro de credenciales, pues se trata de información sensible. El 
-contar ocn un gestor de contraseñas, nos permite evitar su exposición en
- el código o en archivos de configuración que podrían ser 
-accidentalmente subidos al repositorio o quedar expuestos. Esto reduce 
-mucho el riesgo de vulnerabilidades y fortalece la seguridad de la 
-solución.</td>
+<td><strong>AWS Secrets Manager</strong></td>
+<td>El acceso a los datos del cliente, tanto para su extracción como para la conexión con servicios como la base de datos, requiere un manejo seguro de credenciales, pues se trata de información sensible. El contar ocn un gestor de contraseñas, nos permite evitar su exposición en el código o en archivos de configuración que podrían ser accidentalmente subidos al repositorio o quedar expuestos. Esto reduce mucho el riesgo de vulnerabilidades y fortalece la seguridad de la solución.</td>
 </tr>
 <tr class="odd">
-<td>AWS Glue Data Catalog</td>
-<td>Nos permite centralizar y gestionar los metadatos de las tablas 
-generadas en las distintas capas del modelo de datos (Bronz, Silver y 
-Gold), facilitando su consulta por otros componentes de la solución. Al 
-tratarse de un servicio <em>serverless</em>, su uso implica un costo reducido y menos dificultaeds de administración.</td>
+<td><strong>AWS Glue Data Catalog</strong></td>
+<td>Nos permite centralizar y gestionar los metadatos de las tablas generadas en las distintas capas del modelo de datos (Bronz, Silver y Gold), facilitando su consulta por otros componentes de la solución. Al tratarse de un servicio <em>serverless</em>, su uso implica un costo reducido y menos dificultaeds de administración.</td>
 </tr>
 <tr class="even">
-<td>———-</td>
-<td>—————</td>
+<td><strong>SageMaker Processing Jobs / Notebooks</strong></td>
+<td>A fin de orquestar y programar la corrida periódica de los modelos, se recurrió al uso de un Notebook programado en SageMaker. Esto nos permite garantizar la actualización y procesamiento de datos, así como el entrenamiento del modelo y la generación de predicciones de forma periódica. COnsiderando el tamaño de los datos y las demandas del modelo, una instancia ml.t3.large fue suficiente. En caso de requerir un incremento en capacidad, existe margen para ecalar a una instancia superior como ml.t3.xlarge. Una ventaja de este servicio es que no genera costos de cómputo a lo largo del mes, sólo mientras se usa.</td>
 </tr>
 <tr class="odd">
-<td>———-</td>
-<td>—————</td>
+<td><strong>Amazon ECR</strong></td>
+<td>Se utilizó para almacenar la imagen Docker de la aplicación. Esto permitío tener una versión empaquetada y reproducible del producto, para después desplegarla en ECS Fargate.</td>
 </tr>
 <tr class="even">
-<td>———-</td>
-<td>—————</td>
+<td><strong>Amazon ECS (Fargate)</strong></td>
+<td>Se utilizó para desplegar la aplicación web en contenedores sin necesidad de administrar servidores. Esto atendiendo al requerimiento de contar con una aplicación disponible en una URL, accesible desde cualquier equipo de la empresa y que no dependa de una máquina local encendida. Además, Fargate permite escalar la aplicación de forma sencilla y pagar principalmente por los recursos utilizados durante su ejecución.</td>
 </tr>
 <tr class="odd">
-<td>———-</td>
-<td>—————</td>
+<td><strong>Amazon RDS</strong></td>
+<td>Esta herramienta nos permitió captar el feedback del usuario para mejorar nuestra aplicación en una etapa posterior. Es un servicio más costoso, pero si el proyecto avanza, es muy útil poder contar con estos comentarios de los usuarios de la informaicón de forma fresca, justo tras haber usado la aplicación (información transaccional).</td>
 </tr>
 <tr class="even">
-<td>———-</td>
-<td>—————</td>
-</tr>
-<tr class="odd">
-<td>———-</td>
-<td>—————</td>
+<td><strong>AWS CloudFormation</strong></td>
+<td>LO utilizzamos para definir y desplegar la infraestructura como código. Esto permite que los recursos de AWS necesarios para el MVP se creen de forma ordenada, reproducible y documentada, reduciendo errores manuales. También facilita que la solución pueda replicarse, modificarse o escalarse en etapas posteriores del proyecto.</td>
 </tr>
 </tbody>
 </table>
 </section>
-</section>
 <section id="costos-mensuales" class="level2">
-<h2 class="anchored" data-anchor-id="costos-mensuales">Costos mensuales<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#costos-mensuales" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
+<h2 class="anchored" data-anchor-id="costos-mensuales">2.5 Costos mensuales</h2>
 <ul>
 <li><strong>Consideraciones de costo y operación</strong> — estimación mensual y cómo se apagan los recursos.</li>
 </ul>
 </section>
 <section id="reentrenamiento" class="level2">
-<h2 class="anchored" data-anchor-id="reentrenamiento">Reentrenamiento<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#reentrenamiento" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
+<h2 class="anchored" data-anchor-id="reentrenamiento">2.6 Reentrenamiento</h2>
+<p>La arquitectura actual permite el reentrenamiento del modelo, ya que los datos históricos se encuentran almacenados de forma centralizada en Amazon S3 y el proceso de entrenamiento está implementado en Amazon SageMaker. Esto hace posible que podamos volver a entrenar el modelo de manera periódica utilizando datos, siempre que se el cliente proporcione los datos en el mismo sitio y bajo las mismas condiciones.</p>
 </section>
-<section id="precisión-evaluación-vs-groundthruth-y-kpis-de-los-errores-de-predicciones" class="level2">
-<h2 class="anchored" data-anchor-id="precisión-evaluación-vs-groundthruth-y-kpis-de-los-errores-de-predicciones">Precisión (evaluación vs groundthruth) y KPIs de los errores de predicciones<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#precisión-evaluación-vs-groundthruth-y-kpis-de-los-errores-de-predicciones" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
-<ul>
-<li><strong>Evaluación del modelo</strong> — métricas de error por grupo
- de productos y a nivel producto, comparación contra el baseline naive, y
- screenshots de las gráficas de evaluación vs.&nbsp;ground truth.</li>
-</ul>
+<section id="métricas-de-desempeño-del-modelo" class="level2">
+<h2 class="anchored" data-anchor-id="métricas-de-desempeño-del-modelo">3. Métricas de desempeño del modelo</h2>
+<p>A continuación se presentan las métricas del modelo, que nos permiten entender su grado de precisión:</p>
+<section id="métricas-globales" class="level3">
+<h3 class="anchored" data-anchor-id="métricas-globales">3.1 Métricas globales</h3>
+<div id="9e888de5" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display">
+<!--| quarto-html-table-processing: none -->
+<table id="itables_7c39c687_b7d6_446a_a101_4c5bf2bbc812">
+  <tbody>
+    <tr>
+      <td style="vertical-align:middle; text-align:left"><a href="https://mwouts.github.io/itables/"><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="64" viewbox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
+    <g style="fill:#d9d7fc">
+        <path d="M100,400H500V357H100Z"></path>
+        <path d="M100,300H400V257H100Z"></path>
+        <path d="M0,200H400V157H0Z"></path>
+        <path d="M100,100H500V57H100Z"></path>
+        <path d="M100,350H500V307H100Z"></path>
+        <path d="M100,250H400V207H100Z"></path>
+        <path d="M0,150H400V107H0Z"></path>
+        <path d="M100,50H500V7H100Z"></path>
+    </g>
+    <g style="fill:#1a1366;stroke:#1a1366;">
+   <rect x="100" y="7" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="5s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="0" y="107" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="3.5s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="0;0;400" dur="3.5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="207" width="300" height="43">
+    <animate attributename="width" values="0;300;0" dur="3s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="100;100;400" dur="3s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="307" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="4s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="4s" repeatcount="indefinite"></animate>
+  </rect>
+        <g style="fill:transparent;stroke-width:8; stroke-linejoin:round" rx="5">
+            <g transform="translate(45 50) rotate(-45)">
+                <circle r="33" cx="0" cy="0"></circle>
+                <rect x="-8" y="32" width="16" height="30"></rect>
+            </g>
+
+            <g transform="translate(450 152)">
+                <polyline points="-15,-20 -35,-20 -35,40 25,40 25,20"></polyline>
+                <rect x="-15" y="-40" width="60" height="60"></rect>
+            </g>
+
+            <g transform="translate(50 352)">
+                <polygon points="-35,-5 0,-40 35,-5"></polygon>
+                <polygon points="-35,10 0,45 35,10"></polygon>
+            </g>
+
+            <g transform="translate(75 250)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+
+            <g transform="translate(425 250) rotate(180)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
+</a>
+        Loading ITables v2.7.3 from the internet...
+        (need <a href="https://mwouts.github.io/itables/troubleshooting.html">help</a>?)
+      </td>
+    </tr>
+  </tbody>
+</table>
+<link href="https://www.unpkg.com/dt_for_itables@2.5.1/dt_bundle.css" rel="stylesheet">
+<script type="module">
+    import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.1/dt_bundle.js';
+
+    document.querySelectorAll("#itables_7c39c687_b7d6_446a_a101_4c5bf2bbc812:not(.dataTable)").forEach(table => {
+        if (!(table instanceof HTMLTableElement))
+            return;
+
+        let dt_args = {
+          "classes": ["display", "nowrap", "compact"],
+          "columnDefs": [{"render": "function (data, type, row, meta) { return type === 'sort' || type === 'type' ? data[1] : data[0]; }", "targets": [2, 3, 4, 5, 6, 7]}],
+          "data_json": "[[\"xgboost_simple\", 33, [\"1.074986\", 1.0749863604076006], [\"2.11651\", 2.116510423395628], [\"1.437959\", 1.4379586390927286], [\"2.909305\", 2.9093052322921684], [\"0.362972\", 0.3629722786851279], [\"0.792795\", 0.7927948088965411]]]",
+          "keys_to_be_evaluated": [["columnDefs", 0, "render"]],
+          "layout": {"bottomEnd": null, "bottomStart": null, "topEnd": null, "topStart": null},
+          "order": [],
+          "style": {"caption-side": "bottom", "margin": "auto", "table-layout": "auto", "width": "auto"},
+          "table_html": "<table><thead>\n    <tr style=\"text-align: right;\">\n      \n      <th>model_name</th>\n      <th>backtest_month</th>\n      <th>mae_model</th>\n      <th>rmse_model</th>\n      <th>mae_naive</th>\n      <th>rmse_naive</th>\n      <th>mae_improvement</th>\n      <th>rmse_improvement</th>\n    </tr>\n  </thead></table>",
+          "text_in_header_can_be_selected": true
+        };
+        new ITable(table, dt_args);
+    });
+</script>
+</div>
+</div>
+</section>
+<section id="métricas-a-nivel-categoría-principal" class="level3">
+<h3 class="anchored" data-anchor-id="métricas-a-nivel-categoría-principal">3.2 Métricas a nivel categoría principal</h3>
+<div id="ed91f05c" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display">
+<!--| quarto-html-table-processing: none -->
+<table id="itables_a689885c_4833_4955_b169_ce30cad117e4">
+  <tbody>
+    <tr>
+      <td style="vertical-align:middle; text-align:left"><a href="https://mwouts.github.io/itables/"><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="64" viewbox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
+    <g style="fill:#d9d7fc">
+        <path d="M100,400H500V357H100Z"></path>
+        <path d="M100,300H400V257H100Z"></path>
+        <path d="M0,200H400V157H0Z"></path>
+        <path d="M100,100H500V57H100Z"></path>
+        <path d="M100,350H500V307H100Z"></path>
+        <path d="M100,250H400V207H100Z"></path>
+        <path d="M0,150H400V107H0Z"></path>
+        <path d="M100,50H500V7H100Z"></path>
+    </g>
+    <g style="fill:#1a1366;stroke:#1a1366;">
+   <rect x="100" y="7" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="5s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="0" y="107" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="3.5s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="0;0;400" dur="3.5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="207" width="300" height="43">
+    <animate attributename="width" values="0;300;0" dur="3s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="100;100;400" dur="3s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="307" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="4s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="4s" repeatcount="indefinite"></animate>
+  </rect>
+        <g style="fill:transparent;stroke-width:8; stroke-linejoin:round" rx="5">
+            <g transform="translate(45 50) rotate(-45)">
+                <circle r="33" cx="0" cy="0"></circle>
+                <rect x="-8" y="32" width="16" height="30"></rect>
+            </g>
+
+            <g transform="translate(450 152)">
+                <polyline points="-15,-20 -35,-20 -35,40 25,40 25,20"></polyline>
+                <rect x="-15" y="-40" width="60" height="60"></rect>
+            </g>
+
+            <g transform="translate(50 352)">
+                <polygon points="-35,-5 0,-40 35,-5"></polygon>
+                <polygon points="-35,10 0,45 35,10"></polygon>
+            </g>
+
+            <g transform="translate(75 250)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+
+            <g transform="translate(425 250) rotate(180)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
+</a>
+        Loading ITables v2.7.3 from the internet...
+        (need <a href="https://mwouts.github.io/itables/troubleshooting.html">help</a>?)
+      </td>
+    </tr>
+  </tbody>
+</table>
+<link href="https://www.unpkg.com/dt_for_itables@2.5.1/dt_bundle.css" rel="stylesheet">
+<script type="module">
+    import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.1/dt_bundle.js';
+
+    document.querySelectorAll("#itables_a689885c_4833_4955_b169_ce30cad117e4:not(.dataTable)").forEach(table => {
+        if (!(table instanceof HTMLTableElement))
+            return;
+
+        let dt_args = {
+          "classes": ["display", "nowrap", "compact"],
+          "columnDefs": [{"render": "function (data, type, row, meta) { return type === 'sort' || type === 'type' ? data[1] : data[0]; }", "targets": [3, 4, 5, 6, 7, 8]}],
+          "data_json": "[[\"xgboost_simple\", 33, 729, [\"1.078168\", 1.0781680648055425], [\"1.649509\", 1.6495092207694586], [\"0.979881\", 0.9798811156835848], [\"1.490354\", 1.4903540893661114], [\"-0.098287\", -0.0982869491219575], [\"-0.159155\", -0.1591551314033472], 1], [\"xgboost_simple\", 33, 6, [\"3.931509\", 3.931509176890055], [\"5.065549\", 5.065548695587893], [\"3.833333\", 3.8333333333333335], [\"5.625669\", 5.625668684534145], [\"-0.098176\", -0.0981758435567217], [\"0.560120\", 0.5601199889462523], 3], [\"xgboost_simple\", 33, 208, [\"1.237385\", 1.2373852517742376], [\"1.483746\", 1.4837459171651206], [\"1.131410\", 1.1314102564102564], [\"1.512590\", 1.5125896173210205], [\"-0.105975\", -0.1059749953639812], [\"0.028844\", 0.0288437001558996], 4], [\"xgboost_simple\", 33, 5405, [\"1.458375\", 1.4583751745404854], [\"2.591065\", 2.591064867822225], [\"1.981406\", 1.9814061054579093], [\"3.923651\", 3.923651437152292], [\"0.523031\", 0.5230309309174239], [\"1.332587\", 1.3325865693300667], 5], [\"xgboost_simple\", 33, 2, [\"1.392469\", 1.3924694061279297], [\"1.445839\", 1.4458390121703937], [\"1.333333\", 1.333333333333333], [\"1.490712\", 1.4907119849998596], [\"-0.059136\", -0.0591360727945966], [\"0.044873\", 0.0448729728294658], 6], [\"xgboost_simple\", 33, 1, [\"1.002439\", 1.002439260482788], [\"1.002439\", 1.002439260482788], [\"0.000000\", 0.0], [\"0.000000\", 0.0], [\"-1.002439\", -1.002439260482788], [\"-1.002439\", -1.002439260482788], 7], [\"xgboost_simple\", 33, 2615, [\"1.600916\", 1.6009164574953156], [\"2.822115\", 2.822114627102433], [\"2.049968\", 2.049968132568514], [\"3.936011\", 3.936010906591725], [\"0.449052\", 0.449051675073199], [\"1.113896\", 1.1138962794892908], 8], [\"xgboost_simple\", 33, 189, [\"1.924453\", 1.924453144351011], [\"2.687855\", 2.6878546304022537], [\"1.731041\", 1.7310405643738975], [\"2.519559\", 2.5195589976466093], [\"-0.193413\", -0.1934125799771131], [\"-0.168296\", -0.1682956327556444], 9], [\"xgboost_simple\", 33, 6999, [\"0.781884\", 0.7818844755439524], [\"1.456234\", 1.4562342200788472], [\"1.186431\", 1.1864313949611849], [\"2.152765\", 2.15276477664927], [\"0.404547\", 0.4045469194172323], [\"0.696531\", 0.696530556570423], 11], [\"xgboost_simple\", 33, 1831, [\"1.435665\", 1.4356645996097916], [\"3.055287\", 3.055287220860428], [\"1.918715\", 1.918714727835427], [\"3.702424\", 3.702424405350471], [\"0.483050\", 0.4830501282256354], [\"0.647137\", 0.6471371844900435], 12], [\"xgboost_simple\", 33, 4204, [\"0.521084\", 0.5210844340577339], [\"1.015346\", 1.0153462159753512], [\"0.754163\", 0.754162702188392], [\"1.369207\", 1.3692074692991436], [\"0.233078\", 0.2330782681306581], [\"0.353861\", 0.3538612533237923], 13], [\"xgboost_simple\", 33, 5679, [\"1.072158\", 1.0721575442828182], [\"2.210341\", 2.2103408757520424], [\"1.378265\", 1.3782649527498971], [\"2.842246\", 2.842246252053561], [\"0.306107\", 0.3061074084670789], [\"0.631905\", 0.6319053763015186], 14], [\"xgboost_simple\", 33, 472, [\"0.877492\", 0.8774915020597183], [\"1.600409\", 1.6004089563325457], [\"1.001059\", 1.001059322033898], [\"1.733664\", 1.733664000402044], [\"0.123568\", 0.1235678199741798], [\"0.133255\", 0.1332550440694984], 15], [\"xgboost_simple\", 33, 39, [\"3.503855\", 3.503855069478353], [\"4.175612\", 4.175612091902808], [\"2.888889\", 2.888888888888889], [\"3.621714\", 3.621713560845076], [\"-0.614966\", -0.6149661805894642], [\"-0.553899\", -0.5538985310577327], 16], [\"xgboost_simple\", 33, 102, [\"1.783864\", 1.78386401312024], [\"2.428597\", 2.4285974725083084], [\"1.784314\", 1.7843137254901955], [\"2.483935\", 2.483935313272646], [\"0.000450\", 0.0004497123699558], [\"0.055338\", 0.0553378407643374], 19]]",
+          "keys_to_be_evaluated": [["columnDefs", 0, "render"]],
+          "layout": {"bottomEnd": "paging", "bottomStart": "info", "topEnd": "search", "topStart": "pageLength"},
+          "order": [],
+          "style": {"caption-side": "bottom", "margin": "auto", "table-layout": "auto", "width": "auto"},
+          "table_html": "<table><thead>\n    <tr style=\"text-align: right;\">\n      \n      <th>model_name</th>\n      <th>backtest_month</th>\n      <th>n_rows</th>\n      <th>mae_model</th>\n      <th>rmse_model</th>\n      <th>mae_naive</th>\n      <th>rmse_naive</th>\n      <th>mae_improvement</th>\n      <th>rmse_improvement</th>\n      <th>main_category_code</th>\n    </tr>\n  </thead></table>",
+          "text_in_header_can_be_selected": true
+        };
+        new ITable(table, dt_args);
+    });
+</script>
+</div>
+</div>
+</section>
+<section id="métricas-a-nivel-categoría" class="level3">
+<h3 class="anchored" data-anchor-id="métricas-a-nivel-categoría">3.3 Métricas a nivel categoría</h3>
+<div id="4f939bab" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display">
+<!--| quarto-html-table-processing: none -->
+<table id="itables_a7dbc3c6_6c37_49bf_8b4f_dd49672454c3">
+  <tbody>
+    <tr>
+      <td style="vertical-align:middle; text-align:left"><a href="https://mwouts.github.io/itables/"><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="64" viewbox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
+    <g style="fill:#d9d7fc">
+        <path d="M100,400H500V357H100Z"></path>
+        <path d="M100,300H400V257H100Z"></path>
+        <path d="M0,200H400V157H0Z"></path>
+        <path d="M100,100H500V57H100Z"></path>
+        <path d="M100,350H500V307H100Z"></path>
+        <path d="M100,250H400V207H100Z"></path>
+        <path d="M0,150H400V107H0Z"></path>
+        <path d="M100,50H500V7H100Z"></path>
+    </g>
+    <g style="fill:#1a1366;stroke:#1a1366;">
+   <rect x="100" y="7" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="5s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="0" y="107" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="3.5s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="0;0;400" dur="3.5s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="207" width="300" height="43">
+    <animate attributename="width" values="0;300;0" dur="3s" repeatcount="indefinite"></animate>
+    <animate attributename="x" values="100;100;400" dur="3s" repeatcount="indefinite"></animate>
+  </rect>
+        <rect x="100" y="307" width="400" height="43">
+    <animate attributename="width" values="0;400;0" dur="4s" repeatcount="indefinite"></animate>
+      <animate attributename="x" values="100;100;500" dur="4s" repeatcount="indefinite"></animate>
+  </rect>
+        <g style="fill:transparent;stroke-width:8; stroke-linejoin:round" rx="5">
+            <g transform="translate(45 50) rotate(-45)">
+                <circle r="33" cx="0" cy="0"></circle>
+                <rect x="-8" y="32" width="16" height="30"></rect>
+            </g>
+
+            <g transform="translate(450 152)">
+                <polyline points="-15,-20 -35,-20 -35,40 25,40 25,20"></polyline>
+                <rect x="-15" y="-40" width="60" height="60"></rect>
+            </g>
+
+            <g transform="translate(50 352)">
+                <polygon points="-35,-5 0,-40 35,-5"></polygon>
+                <polygon points="-35,10 0,45 35,10"></polygon>
+            </g>
+
+            <g transform="translate(75 250)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+
+            <g transform="translate(425 250) rotate(180)">
+                <polyline points="-30,30 -60,0 -30,-30"></polyline>
+                <polyline points="0,30 -30,0 0,-30"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
+</a>
+        Loading ITables v2.7.3 from the internet...
+        (need <a href="https://mwouts.github.io/itables/troubleshooting.html">help</a>?)
+      </td>
+    </tr>
+  </tbody>
+</table>
+<link href="https://www.unpkg.com/dt_for_itables@2.5.1/dt_bundle.css" rel="stylesheet">
+<script type="module">
+    import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.1/dt_bundle.js';
+
+    document.querySelectorAll("#itables_a7dbc3c6_6c37_49bf_8b4f_dd49672454c3:not(.dataTable)").forEach(table => {
+        if (!(table instanceof HTMLTableElement))
+            return;
+
+        let dt_args = {
+          "classes": ["display", "nowrap", "compact"],
+          "columnDefs": [{"render": "function (data, type, row, meta) { return type === 'sort' || type === 'type' ? data[1] : data[0]; }", "targets": [3, 4, 5, 6, 7, 8]}],
+          "data_json": "[[\"xgboost_simple\", 33, 30, [\"0.567436\", 0.5674363533655803], [\"0.633853\", 0.6338529032926089], [\"0.677778\", 0.6777777777777776], [\"1.184780\", 1.184780023339229], [\"0.110341\", 0.1103414244121973], [\"0.550927\", 0.55092712004662], 2], [\"xgboost_simple\", 33, 401, [\"1.260101\", 1.2601011096687982], [\"1.932214\", 1.932213912680144], [\"1.139651\", 1.139650872817955], [\"1.697185\", 1.6971852563591523], [\"-0.120450\", -0.1204502368508431], [\"-0.235029\", -0.2350286563209918], 3], [\"xgboost_simple\", 33, 35, [\"0.423650\", 0.4236500365393502], [\"0.574954\", 0.5749537059570362], [\"0.361905\", 0.3619047619047619], [\"0.680803\", 0.6808025143109149], [\"-0.061745\", -0.0617452746345882], [\"0.105849\", 0.1058488083538786], 5], [\"xgboost_simple\", 33, 115, [\"0.995746\", 0.9957459740016772], [\"1.452298\", 1.4522981067044531], [\"0.994203\", 0.9942028985507246], [\"1.437591\", 1.4375905768565218], [\"-0.001543\", -0.0015430754509525], [\"-0.014708\", -0.0147075298479313], 6], [\"xgboost_simple\", 33, 148, [\"0.907583\", 0.907583414702802], [\"1.219855\", 1.219854590592166], [\"0.743243\", 0.7432432432432432], [\"1.065956\", 1.0659555625171535], [\"-0.164340\", -0.1643401714595589], [\"-0.153899\", -0.1538990280750123], 7], [\"xgboost_simple\", 33, 6, [\"3.931509\", 3.931509176890055], [\"5.065549\", 5.065548695587893], [\"3.833333\", 3.8333333333333335], [\"5.625669\", 5.625668684534145], [\"-0.098176\", -0.0981758435567217], [\"0.560120\", 0.5601199889462523], 9], [\"xgboost_simple\", 33, 4, [\"1.216231\", 1.2162314653396606], [\"1.623451\", 1.6234514191260152], [\"0.583333\", 0.5833333333333333], [\"0.726483\", 0.7264831572567789], [\"-0.632898\", -0.6328981320063274], [\"-0.896968\", -0.8969682618692363], 11], [\"xgboost_simple\", 33, 111, [\"1.359049\", 1.3590490571013445], [\"1.606596\", 1.6065959249941284], [\"1.354354\", 1.3543543543543544], [\"1.774584\", 1.7745842186690235], [\"-0.004695\", -0.0046947027469899], [\"0.167988\", 0.1679882936748953], 12], [\"xgboost_simple\", 33, 3, [\"0.979269\", 0.9792685906092324], [\"1.051213\", 1.0512125151641547], [\"0.666667\", 0.6666666666666666], [\"0.816497\", 0.816496580927726], [\"-0.312602\", -0.3126019239425659], [\"-0.234716\", -0.2347159342364286], 14], [\"xgboost_simple\", 33, 32, [\"0.690127\", 0.6901269517838955], [\"0.873976\", 0.8739763128765543], [\"0.567708\", 0.5677083333333334], [\"0.705263\", 0.7052629533254483], [\"-0.122419\", -0.1224186184505621], [\"-0.168713\", -0.168713359551106], 15], [\"xgboost_simple\", 33, 58, [\"1.321291\", 1.3212912575951938], [\"1.514894\", 1.5148942993354662], [\"1.077586\", 1.0775862068965518], [\"1.353830\", 1.3538295336305337], [\"-0.243705\", -0.243705050698642], [\"-0.161065\", -0.1610647657049326], 16], [\"xgboost_simple\", 33, 1415, [\"1.044904\", 1.0449035020262107], [\"1.502610\", 1.502610042895146], [\"1.289164\", 1.289163722025913], [\"2.269015\", 2.269015100199047], [\"0.244260\", 0.2442602199997019], [\"0.766405\", 0.766405057303901], 19], [\"xgboost_simple\", 33, 1639, [\"2.582377\", 2.5823769052993093], [\"4.104931\", 4.104930615413289], [\"3.814521\", 3.814521049420378], [\"6.365585\", 6.365585327705593], [\"1.232144\", 1.2321441441210688], [\"2.260655\", 2.260654712292304], 20], [\"xgboost_simple\", 33, 69, [\"0.612375\", 0.6123753423276155], [\"0.795683\", 0.7956832410968471], [\"0.635266\", 0.6352657004830918], [\"0.884879\", 0.8848792415588168], [\"0.022890\", 0.0228903581554763], [\"0.089196\", 0.0891960004619697], 21], [\"xgboost_simple\", 33, 195, [\"0.518212\", 0.5182119583472228], [\"0.697243\", 0.6972429117645735], [\"0.557265\", 0.5572649572649573], [\"0.816671\", 0.8166710273736708], [\"0.039053\", 0.0390529989177345], [\"0.119428\", 0.1194281156090972], 22], [\"xgboost_simple\", 33, 1255, [\"0.935702\", 0.9357017974929506], [\"1.402298\", 1.402298289590534], [\"1.086720\", 1.0867197875166], [\"1.854162\", 1.85416153736402], [\"0.151018\", 0.1510179900236495], [\"0.451863\", 0.4518632477734861], 23], [\"xgboost_simple\", 33, 622, [\"1.208924\", 1.2089235153037252], [\"2.104863\", 2.1048630556322614], [\"1.595927\", 1.5959271168274385], [\"2.782149\", 2.7821491149378024], [\"0.387004\", 0.387003601523713], [\"0.677286\", 0.677286059305541], 24], [\"xgboost_simple\", 33, 210, [\"0.485249\", 0.4852485827037266], [\"0.731143\", 0.7311432718041483], [\"0.592063\", 0.5920634920634921], [\"0.972506\", 0.9725056276275196], [\"0.106815\", 0.1068149093597654], [\"0.241362\", 0.2413623558233713], 25], [\"xgboost_simple\", 33, 2, [\"1.392469\", 1.3924694061279297], [\"1.445839\", 1.4458390121703937], [\"1.333333\", 1.333333333333333], [\"1.490712\", 1.4907119849998596], [\"-0.059136\", -0.0591360727945966], [\"0.044873\", 0.0448729728294658], 26], [\"xgboost_simple\", 33, 1, [\"1.002439\", 1.002439260482788], [\"1.002439\", 1.002439260482788], [\"0.000000\", 0.0], [\"0.000000\", 0.0], [\"-1.002439\", -1.002439260482788], [\"-1.002439\", -1.002439260482788], 27], [\"xgboost_simple\", 33, 619, [\"2.274636\", 2.274636290570261], [\"4.092236\", 4.092235925818392], [\"2.994884\", 2.99488422186322], [\"5.613266\", 5.613265597949976], [\"0.720248\", 0.7202479312929593], [\"1.521030\", 1.5210296721315837], 28], [\"xgboost_simple\", 33, 60, [\"1.810891\", 1.8108909626801808], [\"3.076175\", 3.076175468719636], [\"2.505556\", 2.5055555555555555], [\"4.852357\", 4.852357197318677], [\"0.694665\", 0.6946645928753747], [\"1.776182\", 1.7761817285990418], 29], [\"xgboost_simple\", 33, 1747, [\"1.263717\", 1.2637169188475976], [\"1.898151\", 1.898150932413644], [\"1.676398\", 1.6763976340393056], [\"3.034166\", 3.0341659391013325], [\"0.412681\", 0.412680715191708], [\"1.136015\", 1.1360150066876886], 30], [\"xgboost_simple\", 33, 189, [\"2.444602\", 2.444601891532777], [\"4.363470\", 4.363469672202525], [\"2.263668\", 2.2636684303350973], [\"4.310839\", 4.310839052125854], [\"-0.180933\", -0.1809334611976796], [\"-0.052631\", -0.0526306200766706], 31], [\"xgboost_simple\", 33, 41, [\"2.067045\", 2.067045237959885], [\"3.035566\", 3.035565605546332], [\"1.939024\", 1.9390243902439028], [\"2.831898\", 2.831898249668756], [\"-0.128021\", -0.1280208477159821], [\"-0.203667\", -0.2036673558775752], 33], [\"xgboost_simple\", 33, 5, [\"2.641772\", 2.641771697998047], [\"2.641928\", 2.641928437431823], [\"0.000000\", 0.0], [\"0.000000\", 0.0], [\"-2.641772\", -2.641771697998047], [\"-2.641928\", -2.641928437431823], 34], [\"xgboost_simple\", 33, 140, [\"1.864145\", 1.864144737379892], [\"2.598202\", 2.598202268647384], [\"1.747619\", 1.7476190476190474], [\"2.487110\", 2.4871096247882374], [\"-0.116526\", -0.1165256897608442], [\"-0.111093\", -0.1110926438591461], 35], [\"xgboost_simple\", 33, 3, [\"1.594556\", 1.594555934270223], [\"1.596943\", 1.5969430625689425], [\"1.000000\", 1.0], [\"1.290994\", 1.2909944487358056], [\"-0.594556\", -0.5945559342702229], [\"-0.305949\", -0.3059486138331369], 36], [\"xgboost_simple\", 33, 1925, [\"0.807015\", 0.8070152109629148], [\"1.652151\", 1.6521512642877374], [\"1.245108\", 1.2451082251082253], [\"2.333244\", 2.333243659377643], [\"0.438093\", 0.4380930141453104], [\"0.681092\", 0.6810923950899057], 37], [\"xgboost_simple\", 33, 579, [\"0.657575\", 0.6575751642283174], [\"1.163443\", 1.1634432767140144], [\"1.100173\", 1.1001727115716753], [\"2.176619\", 2.176619009565029], [\"0.442598\", 0.4425975473433579], [\"1.013176\", 1.0131757328510145], 38], [\"xgboost_simple\", 33, 4304, [\"0.802200\", 0.8022003011937257], [\"1.405681\", 1.4056805814158766], [\"1.201441\", 1.2014405204460967], [\"2.096233\", 2.096233296031715], [\"0.399240\", 0.3992402192523711], [\"0.690553\", 0.6905527146158383], 40], [\"xgboost_simple\", 33, 191, [\"0.447639\", 0.447638988494873], [\"1.252323\", 1.2523225225919106], [\"0.518325\", 0.518324607329843], [\"1.254660\", 1.254659726646397], [\"0.070686\", 0.0706856188349699], [\"0.002337\", 0.0023372040544864], 41], [\"xgboost_simple\", 33, 249, [\"1.988473\", 1.9884725497908384], [\"3.898179\", 3.898178906486613], [\"2.710843\", 2.710843373493976], [\"4.957134\", 4.95713441570332], [\"0.722371\", 0.7223708237031377], [\"1.058956\", 1.058955509216707], 42], [\"xgboost_simple\", 33, 92, [\"0.594299\", 0.5942986218825631], [\"0.829395\", 0.8293947177082563], [\"0.568841\", 0.5688405797101449], [\"1.008718\", 1.0087180365665551], [\"-0.025458\", -0.0254580421724182], [\"0.179323\", 0.1793233188582987], 43], [\"xgboost_simple\", 33, 29, [\"0.634769\", 0.6347694438079308], [\"0.679084\", 0.6790842409306195], [\"0.896552\", 0.896551724137931], [\"1.050451\", 1.0504514628777804], [\"0.261782\", 0.2617822803300003], [\"0.371367\", 0.3713672219471609], 44], [\"xgboost_simple\", 33, 40, [\"0.553547\", 0.5535465836524963], [\"0.649985\", 0.6499853943683928], [\"0.483333\", 0.4833333333333333], [\"0.670820\", 0.6708203932499369], [\"-0.070213\", -0.070213250319163], [\"0.020835\", 0.0208349988815441], 45], [\"xgboost_simple\", 33, 1213, [\"1.431814\", 1.4318143887059902], [\"3.136301\", 3.136300595001821], [\"2.031739\", 2.031739488870569], [\"3.836068\", 3.836068417426693], [\"0.599925\", 0.5999251001645787], [\"0.699768\", 0.6997678224248713], 47], [\"xgboost_simple\", 33, 181, [\"1.121363\", 1.121363340161782], [\"1.897703\", 1.8977029761810948], [\"1.098527\", 1.098526703499079], [\"1.737491\", 1.7374914708907343], [\"-0.022837\", -0.0228366366627028], [\"-0.160212\", -0.1602115052903603], 49], [\"xgboost_simple\", 33, 27, [\"3.651443\", 3.651442536601314], [\"4.835469\", 4.835468555780766], [\"2.858025\", 2.858024691358025], [\"4.040052\", 4.040051541862473], [\"-0.793418\", -0.793417845243289], [\"-0.795417\", -0.7954170139182928], 54], [\"xgboost_simple\", 33, 3595, [\"0.521911\", 0.5219114277724265], [\"1.051297\", 1.0512966330596032], [\"0.755401\", 0.7554010199350951], [\"1.387367\", 1.387367115626526], [\"0.233490\", 0.2334895921626686], [\"0.336070\", 0.3360704825669229], 55], [\"xgboost_simple\", 33, 125, [\"0.642048\", 0.6420481176376343], [\"1.087637\", 1.087637268233994], [\"1.080000\", 1.0800000000000003], [\"1.949587\", 1.949586850819652], [\"0.437952\", 0.437951882362366], [\"0.861950\", 0.861949582585658], 56], [\"xgboost_simple\", 33, 181, [\"0.502855\", 0.5028549221997761], [\"0.740318\", 0.7403183484684029], [\"0.639963\", 0.6399631675874768], [\"1.005128\", 1.0051280425047064], [\"0.137108\", 0.1371082453877007], [\"0.264810\", 0.2648096940363035], 57], [\"xgboost_simple\", 33, 295, [\"0.479035\", 0.4790350677603382], [\"0.617699\", 0.6176987612593658], [\"0.681921\", 0.6819209039548023], [\"1.007458\", 1.0074580643443325], [\"0.202886\", 0.2028858361944641], [\"0.389759\", 0.3897593030849666], 58], [\"xgboost_simple\", 33, 8, [\"0.222410\", 0.2224096655845642], [\"0.372585\", 0.3725850830453768], [\"0.354167\", 0.3541666666666666], [\"0.738335\", 0.7383352144445562], [\"0.131757\", 0.1317570010821024], [\"0.365750\", 0.3657501313991793], 60], [\"xgboost_simple\", 33, 745, [\"1.692613\", 1.6926125601634083], [\"3.226463\", 3.226462815566973], [\"2.317450\", 2.3174496644295304], [\"4.170754\", 4.170754147225601], [\"0.624837\", 0.624837104266122], [\"0.944291\", 0.944291331658628], 61], [\"xgboost_simple\", 33, 59, [\"0.446706\", 0.4467063515873278], [\"0.545952\", 0.5459524083217396], [\"0.573446\", 0.5734463276836157], [\"0.768678\", 0.7686782747150022], [\"0.126740\", 0.1267399760962878], [\"0.222726\", 0.2227258663932625], 62], [\"xgboost_simple\", 33, 952, [\"0.974940\", 0.9749401060222578], [\"2.211914\", 2.2119140069461096], [\"1.342787\", 1.3427871148459385], [\"3.022953\", 3.022953351517825], [\"0.367847\", 0.3678470088236805], [\"0.811039\", 0.8110393445717152], 63], [\"xgboost_simple\", 33, 626, [\"0.517595\", 0.5175952532420904], [\"0.761321\", 0.7613208886766715], [\"0.608626\", 0.6086261980830671], [\"0.932683\", 0.9326827186150304], [\"0.091031\", 0.0910309448409766], [\"0.171362\", 0.171361829938359], 64], [\"xgboost_simple\", 33, 693, [\"1.078479\", 1.0784789100181833], [\"1.839127\", 1.8391266205227252], [\"1.232564\", 1.2325637325637326], [\"2.088155\", 2.088154594466035], [\"0.154085\", 0.1540848225455493], [\"0.249028\", 0.2490279739433094], 65], [\"xgboost_simple\", 33, 265, [\"0.592147\", 0.5921469382519992], [\"1.005804\", 1.0058040509559267], [\"0.606918\", 0.6069182389937107], [\"0.967447\", 0.9674470933372578], [\"0.014771\", 0.0147713007417115], [\"-0.038357\", -0.0383569576186689], 67], [\"xgboost_simple\", 33, 507, [\"0.865054\", 0.8650542001517332], [\"1.385258\", 1.3852580685618818], [\"1.221236\", 1.2212360289283366], [\"2.063333\", 2.063332658876851], [\"0.356182\", 0.3561818287766034], [\"0.678075\", 0.678074590314969], 69], [\"xgboost_simple\", 33, 740, [\"1.451809\", 1.451809048652649], [\"2.842966\", 2.842965541701688], [\"1.765766\", 1.765765765765766], [\"3.529392\", 3.5293918182325137], [\"0.313957\", 0.313956717113117], [\"0.686426\", 0.6864262765308258], 70], [\"xgboost_simple\", 33, 40, [\"2.039302\", 2.039301669597626], [\"3.794667\", 3.79466743733658], [\"1.933333\", 1.9333333333333336], [\"4.568005\", 4.568004670166906], [\"-0.105968\", -0.1059683362642922], [\"0.773337\", 0.7733372328303263], 71], [\"xgboost_simple\", 33, 1052, [\"0.998550\", 0.9985503677859506], [\"2.138224\", 2.1382239531595646], [\"1.320659\", 1.3206590621039291], [\"2.784698\", 2.7846977598757827], [\"0.322109\", 0.3221086943179785], [\"0.646474\", 0.6464738067162181], 72], [\"xgboost_simple\", 33, 59, [\"0.937331\", 0.9373312612711372], [\"1.686733\", 1.6867329547657064], [\"1.042373\", 1.0423728813559323], [\"1.678068\", 1.6780683451510898], [\"0.105042\", 0.105041620084795], [\"-0.008665\", -0.0086646096146165], 73], [\"xgboost_simple\", 33, 2, [\"0.523291\", 0.5232906937599182], [\"0.656771\", 0.6567708862785998], [\"0.500000\", 0.5], [\"0.707107\", 0.7071067811865476], [\"-0.023291\", -0.0232906937599182], [\"0.050336\", 0.0503358949079477], 74], [\"xgboost_simple\", 33, 303, [\"0.963913\", 0.9639131955974566], [\"1.773978\", 1.7739781675100563], [\"1.022002\", 1.022002200220022], [\"1.903859\", 1.903859011213836], [\"0.058089\", 0.0580890046225653], [\"0.129881\", 0.1298808437037795], 75], [\"xgboost_simple\", 33, 42, [\"0.902894\", 0.902893622716268], [\"1.171792\", 1.171792337992772], [\"1.071429\", 1.0714285714285714], [\"1.373406\", 1.3734057616900357], [\"0.168535\", 0.1685349487123034], [\"0.201613\", 0.2016134236972635], 76], [\"xgboost_simple\", 33, 43, [\"0.316165\", 0.3161649870318035], [\"0.342858\", 0.3428576844313291], [\"0.976744\", 0.9767441860465116], [\"1.011561\", 1.0115610777177464], [\"0.660579\", 0.6605791990147081], [\"0.668703\", 0.6687033932864173], 77], [\"xgboost_simple\", 33, 23, [\"0.619328\", 0.6193277524865192], [\"1.020458\", 1.0204581665835806], [\"0.579710\", 0.5797101449275361], [\"1.142080\", 1.1420804814403216], [\"-0.039618\", -0.039617607558983], [\"0.121622\", 0.121622314856741], 78], [\"xgboost_simple\", 33, 39, [\"3.503855\", 3.503855069478353], [\"4.175612\", 4.175612091902808], [\"2.888889\", 2.888888888888889], [\"3.621714\", 3.621713560845076], [\"-0.614966\", -0.6149661805894642], [\"-0.553899\", -0.5538985310577327], 79], [\"xgboost_simple\", 33, 102, [\"1.783864\", 1.78386401312024], [\"2.428597\", 2.4285974725083084], [\"1.784314\", 1.7843137254901955], [\"2.483935\", 2.483935313272646], [\"0.000450\", 0.0004497123699558], [\"0.055338\", 0.0553378407643374], 83]]",
+          "keys_to_be_evaluated": [["columnDefs", 0, "render"]],
+          "layout": {"bottomEnd": "paging", "bottomStart": "info", "topEnd": "search", "topStart": "pageLength"},
+          "order": [],
+          "style": {"caption-side": "bottom", "margin": "auto", "table-layout": "auto", "width": "auto"},
+          "table_html": "<table><thead>\n    <tr style=\"text-align: right;\">\n      \n      <th>model_name</th>\n      <th>backtest_month</th>\n      <th>n_rows</th>\n      <th>mae_model</th>\n      <th>rmse_model</th>\n      <th>mae_naive</th>\n      <th>rmse_naive</th>\n      <th>mae_improvement</th>\n      <th>rmse_improvement</th>\n      <th>item_category_id</th>\n    </tr>\n  </thead></table>",
+          "text_in_header_can_be_selected": true
+        };
+        new ITable(table, dt_args);
+    });
+</script>
+</div>
+</div>
+</section>
 </section>
 <section id="tour-de-la-aplicación" class="level2">
-<h2 class="anchored" data-anchor-id="tour-de-la-aplicación">Tour de la aplicación<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#tour-de-la-aplicación" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
+<h2 class="anchored" data-anchor-id="tour-de-la-aplicación">4. Tour de la aplicación</h2>
 <ul>
-<li><strong>Tour de la aplicación</strong> — screenshots de <strong>cada vista</strong>
- del Streamlit (inferencia individual, batch, exploración, KPIs, 
-feedback de negocio, listado de productos con problemas) mostrando la UI
- con datos reales.</li>
+<li><strong>Tour de la aplicación</strong> — screenshots de <strong>cada vista</strong> del Streamlit (inferencia individual, batch, exploración, KPIs, feedback de negocio, listado de productos con problemas) mostrando la UI con datos reales.</li>
 </ul>
 </section>
 <section id="limitaciones-y-proximos-pasos" class="level2">
-<h2 class="anchored" data-anchor-id="limitaciones-y-proximos-pasos">Limitaciones y proximos pasos<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#limitaciones-y-proximos-pasos" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
+<h2 class="anchored" data-anchor-id="limitaciones-y-proximos-pasos">5. Limitaciones y proximos pasos</h2>
+<p>En cuanto a las limitaciones tenemos:</p>
 <ul>
-<li><strong>Limitaciones y próximos pasos</strong> — qué dejaron fuera y cómo se escalaría a producción.</li>
+<li><strong>Entrenamiento:</strong> Aunque el modelo puede reentrenarse con nuevos datos, no se encuentra completamiente automatizado. El MVP actual se basa en la ejecución de una programada de un notebook, no en una pipeline orquestada que gestione automáticamente el proceso.</li>
+<li><strong>INferencia en tiempo real:</strong> Atendiendo los requerimientos del cliente, se propuso un esquema de inferencia offline (predicciones precomputadas), sin embargo, esto limita la posibilidad de los equipos de contar con información actualizada a mitad del periodo, por ejemplo, lo que podría traducirse en menos margen de acción ante cambios repentinos en el mercado.</li>
+<li><strong>Gestión de notificaciones:</strong> AUnque la generación de archivos para el cliente se encuentra funcionando conforme a lo especificado, el sistema de alertamiento no está implementado en esta versión.</li>
+<li><strong>Monitoreo del modelo:</strong> Aunque se cuenta con métricas de evaluación, con la versión actual no se puede monitorear el desempeño del modelo de forma continua para identificar posibles degradaciones del modelo o modificaciones en los datos de entrada.</li>
+</ul>
+<p>Los siguientes pasos prioritarios serían:</p>
+<ul>
+<li>La implementación de varios modelos (en lugar de uno solo) para mejorar la precisión de las proyecciones.</li>
+<li>La mejora en la experiencia del usuario basado en el feedback recibido a través de la aplicación.</li>
+<li>La implementación del monitoreo del modelo.</li>
 </ul>
 </section>
 <section id="uso-de-herramientas-de-ia-en-el-proyecto" class="level2">
-<h2 class="anchored" data-anchor-id="uso-de-herramientas-de-ia-en-el-proyecto">Uso de herramientas de IA en el proyecto<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#uso-de-herramientas-de-ia-en-el-proyecto" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
-<p>declaración explícita (ver sección de honestidad académica).</p>
+<h2 class="anchored" data-anchor-id="uso-de-herramientas-de-ia-en-el-proyecto">6. Uso de herramientas de IA en el proyecto</h2>
+<p>Las herramientas de inteligencia artificial fueron utilizadas como un recurso de apoyo durante el desarrollo de este proyecto, principalmente para mejorar la eficiencia en tareas de documentación y comunicación, así como para resolver dudas técnicas específicas.</p>
+<p>Su uso incluyó:</p>
+<ul>
+<li>Generación y mejora de documentación para funciones y scripts.</li>
+<li>Traducción y síntesis de secciones del README (por ejemplo, Project Objective and Description) a partir del contenido del reporte.</li>
+<li>Revisión y mejora de redacción en inglés, especialmente en mensajes de logging y descripciones técnicas, para asegurar claridad y naturalidad.</li>
+<li>Apoyo en la resolución de dudas puntuales, como la configuración de roles de acceso (por ejemplo, habilitar que SageMaker acceda de forma segura a Secrets Manager para fuentes externas como Kaggle), la configuración del la pipeline para el NOtebook.</li>
+<li>Apoyo en la refactorización del código de predicciones.</li>
+</ul>
+<p>Todas las decisiones de arquitectura, diseño del sistema, implementación y validación de la solución fueron realizadas por nosotros.</p>
 </section>
 </section>
 <section id="apéndice" class="level1">
 <h1>Apéndice</h1>
 <section id="screenshots" class="level2">
-<h2 class="anchored" data-anchor-id="screenshots">Screenshots<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#screenshots" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
+<h2 class="anchored" data-anchor-id="screenshots">Screenshots</h2>
 <section id="amazon-s3" class="level3">
-<h3 class="anchored" data-anchor-id="amazon-s3">Amazon S3<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#amazon-s3" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h3>
+<h3 class="anchored" data-anchor-id="amazon-s3">Amazon S3</h3>
 <ul>
 <li>Estructura:</li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Demand%20Forecasting%20App_files/S3_structure.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<p><img src="./images/S3_structure.png" class="img-fluid figure-img" style="width:75.0%"></p>
 <figcaption>S3 Structure</figcaption>
 </figure>
 </div>
@@ -399,7 +609,7 @@ feedback de negocio, listado de productos con problemas) mostrando la UI
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Demand%20Forecasting%20App_files/S3_bronze.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<p><img src="./images/S3_bronze.png" class="img-fluid figure-img" style="width:75.0%"></p>
 <figcaption>S3 Bronze</figcaption>
 </figure>
 </div>
@@ -408,7 +618,7 @@ feedback de negocio, listado de productos con problemas) mostrando la UI
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Demand%20Forecasting%20App_files/S3_silver.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<p><img src="./images/S3_silver.png" class="img-fluid figure-img" style="width:75.0%"></p>
 <figcaption>S3 Silver</figcaption>
 </figure>
 </div>
@@ -417,13 +627,81 @@ feedback de negocio, listado de productos con problemas) mostrando la UI
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Demand%20Forecasting%20App_files/S3_gold.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<p><img src="./images/S3_gold.png" class="img-fluid figure-img" style="width:75.0%"></p>
 <figcaption>S3 Gold</figcaption>
 </figure>
 </div>
 <ul>
-<li><strong>Screenshots de los recursos de AWS desplegados</strong> — consola de ECS con el servicio corriendo, CloudFormation stacks en <code>CREATE_COMPLETE</code>, ECR con la imagen publicada, RDS disponible, y el endpoint público de la app abierto en el browser.</li>
+<li>Model:</li>
 </ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/S3_model.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>S3 Model</figcaption>
+</figure>
+</div>
+<ul>
+<li>Pre-computed predictions:</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/S3_predictions.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>S3 Predictions</figcaption>
+</figure>
+</div>
+<ul>
+<li>Metrics:</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/S3_predictions.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>S3 Detailed Metrics</figcaption>
+</figure>
+</div>
+<ul>
+<li>Data and ML Pipeline:</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/Data_ML_Pipeline.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Sagemaker Pipeline</figcaption>
+</figure>
+</div>
+<ul>
+<li>AWS Secret Manager:</li>
+</ul>
+<p><img src="./images/AWS_Secret_Manager.png" class="img-fluid" style="width:75.0%" alt="AWS Secret Manager"> <img src="./images/AWS_Secret_Manager2.png" class="img-fluid" style="width:75.0%" alt="AWS Secret Manager2"></p>
+<ul>
+<li>Streamlit:</li>
+</ul>
+<p><img src="./images/Streamlit.png" class="img-fluid" style="width:75.0%" alt="Streamlit"> <img src="./images/Streamlit_cluster.png" class="img-fluid" style="width:75.0%" alt="Streamlit2"></p>
+<ul>
+<li>Data and ML Pipeline:</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/Data_ML_Pipeline.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Sagemaker Pipeline</figcaption>
+</figure>
+</div>
+<ul>
+<li>Data and ML Pipeline:</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/Data_ML_Pipeline.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Sagemaker Pipeline</figcaption>
+</figure>
+</div>
+<ul>
+<li>ECR:</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/ECR.jpeg" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>ECR</figcaption>
+</figure>
+</div>
 </section>
 </section>
 </section>
