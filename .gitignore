@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# data
+data/
+
+# Quarto
+docs/final_report_files
