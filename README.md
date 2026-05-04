@@ -13,71 +13,67 @@ The system is built on AWS using a modular architecture that separates data stor
 ```
 .
 ├── docs
+│   ├── Demand Forecasting App.html
 │   ├── diagrams
-│   │   └── ERD_silver.drawio.png
-│   ├── entregables.txt
-│   ├── final_report_files
-│   │   └── libs
-│   │       ├── bootstrap
-│   │       │   ├── bootstrap-756ac36e9b56ac242e07f29663160013.min.css
-│   │       │   ├── bootstrap-82eac07570d2056c6c0099389084f61d.min.css
-│   │       │   ├── bootstrap-icons.css
-│   │       │   ├── bootstrap-icons.woff
-│   │       │   └── bootstrap.min.js
-│   │       ├── clipboard
-│   │       │   └── clipboard.min.js
-│   │       └── quarto-html
-│   │           ├── anchor.min.js
-│   │           ├── axe
-│   │           │   └── axe-check.js
-│   │           ├── popper.min.js
-│   │           ├── quarto.js
-│   │           ├── quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css
-│   │           ├── tabsets
-│   │           │   └── tabsets.js
-│   │           ├── tippy.css
-│   │           └── tippy.umd.min.js
-│   ├── final_report.html
+│   │   ├── Arquitectura.jpeg
+│   │   └── ERD_1cCompany.png
 │   ├── final_report.qmd
-│   └── images
+│   ├── images
+│   │   ├── AWS_Secret_Manager2.jpeg
+│   │   ├── AWS_Secret_Manager.jpeg
+│   │   ├── Data_ML_Pipeline.png
+│   │   ├── ECR.jpeg
+│   │   ├── S3_bronze.png
+│   │   ├── S3_gold.png
+│   │   ├── S3_metrics_importance.png
+│   │   ├── S3_model.png
+│   │   ├── S3_predictions.png
+│   │   ├── S3_silver.png
+│   │   ├── S3_structure.png
+│   │   ├── Streamlit_cluster.jpeg
+│   │   └── Streamlit.jpeg
+│   └── video
+│       └── Tour de aplicacion.mp4
 ├── elt
 │   ├── bronze.py
+│   ├── gold.py
 │   └── silver.py
 ├── LICENSE
-├── prueba.ipynb
+├── models
+│   ├── xgboost_predict.py
+│   └── xgboost_train.py
 ├── pyproject.toml
 ├── README.md
+├── run_pipeline.ipynb
+├── streamlit
+│   ├── app.py
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   └── run_streamlit.ipynb
 └── uv.lock
 ```
 
 ## Architecture
 
 ### Diagram
-- Link to .drawio file
-- Image (PNG / SVG)
+
+![Arquitectura](docs/diagrams/Arquitectura.jpeg)
 
 ### Services Justification
 
-
-
-- Architecture justification
-
-- **Amazon S3**
-- **Amazon ECS (Fargate)**
-- **Amazon ECR**
-- **AWS Glue Data Catalog**
-- **Amazon RDS** — aunque sea para un subconjunto de datos operacionales (catálogos, metadata del POC, estado de jobs, feedback de negocio, lo que ustedes decidan)
-- **AWS CloudFormation** — para el despliegue de la capa de infraestructura persistente del POC (la app y la base de datos), no a mano desde la consola
-- **AWS Secrets Manager** — para gestionar las credenciales de la base de datos que lea su aplicación.
-- **Amazon SageMaker — Batch Transform (opcional)** — si deciden usarlo como mecanismo para ejecutar inferencia batch desde la app, inclúyanlo en el diagrama y justifíquenlo. Si no lo usan, está bien — pero justifiquen en el reporte la alternativa que escogieron.
-
-en el README deben poder defender por qué cada uno está ahí.
-
+| Service | Justification |
+|----------|---------------|
+| **Amazon S3** | Provides secure and persistent storage outside the application, ensuring data availability even when the app is not running. Supports raw (CSV), processed data, models, and artifacts in a cost-effective and scalable way. Suitable for batch predictions with no transactional requirements. |
+| **AWS Secrets Manager** | Securely manages credentials for data ingestion and service access, preventing exposure in code or configuration files and reducing security risks. |
+| **AWS Glue Data Catalog** | Centralizes metadata for tables across Bronze, Silver, and Gold layers, enabling structured data discovery and consumption with low maintenance as a serverless service. |
+| **SageMaker Processing Jobs / Notebooks** | Enables scheduled data processing, model training, and prediction generation. Cost-efficient as compute resources are used only during execution; easily scalable if needed. |
+| **Amazon ECR** | Stores Docker images of the application, enabling reproducible builds and seamless deployment to ECS Fargate. |
+| **Amazon ECS (Fargate)** | Deploys the web application in containers without managing servers, ensuring availability via URL and scalability based on demand. |
+| **Amazon RDS** | Stores transactional data such as user feedback and application metadata, enabling structured data capture for future improvements. |
+| **AWS CloudFormation** | Defines and deploys infrastructure as code, ensuring reproducibility, consistency, and easier scaling or modification of the solution. |
 
 
 ## ERD
-- Link to .drawio file
-- Image (PNG / SVG)
 
 ![ERD](docs/diagrams/ERD_1cCompany.png)
 
@@ -154,8 +150,14 @@ uv run python elt/gold.py \
 
 ## Use of AI Tools in the Project
 
-- Generate documentation for functions and scripts.
-- Translate and sinthetize the README 'Project Objective and Description' section, based on our report section 1.
-- Validate and improve (make more natural) or english translations for logging.
-- Questions: Add a role to SageMaker to access Secrets Manager for Kaggle.
-- 
+AI tools were used as a support resource throughout the development of this project, primarily to improve efficiency in documentation and communication tasks, as well as to assist in resolving specific technical questions.
+
+Their use included:
+
+Generating and refining documentation for functions and scripts.
+Translating and synthesizing sections of the README (e.g., Project Objective and Description) based on the report content.
+Reviewing and improving English writing, particularly for logging messages and technical descriptions, to ensure clarity and natural language usage.
+Assisting with specific technical questions, such as configuring access roles (e.g., enabling SageMaker to securely access Secrets Manager for external sources like Kaggle), and setting up the pipeline for the notebook.
+Supporting the refactoring of the prediction code.
+
+All architectural decisions, system design, implementation, and validation of the solution were carried out by us.
