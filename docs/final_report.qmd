@@ -55,7 +55,7 @@ Adicionalmente, el MVP deberá:
 
 Con la finalidad de atender las necesidades del cliente, se propone desarrollar una aplicación de Streamlit desplegada en AWS con una URL pública accesible desde cualquier navegador en equipos de cómputo de la 1C Company. Esta aplicación permite separar en capas el almacenamiento de datos, el procesamiento analítico y la capa de consumo, lo que facilita su escalabilidad y mantenibilidad, al tiempo que mantiene su disponibilidad.
 
-**Link a la solución:** [Demand Forecasting App](http://100.25.141.202:8501)
+**Link a la solución:** [Demand Forecasting App](http://98.84.41.174:8501)
 
 
 ## 2.1 Arquitectura
