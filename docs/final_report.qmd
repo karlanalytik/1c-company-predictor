@@ -5,9 +5,6 @@ author: "Karla Soto / Paulo Escalante"
 date: "today"
 theme: cosmo
 format:
-#  pdf:
-#    pdf-engine: xelatex
-#    mainfont: "Arial"
   html:
     toc: true
     toc-location: left
@@ -29,7 +26,6 @@ Necesidades:
 - **falta:** modo **batch** en el que el usuario selecciona un grupo más grande (una categoría completa, todos los productos de una tienda, o el catálogo completo) y el sistema produce el pronóstico para ese grupo **sin degradar la experiencia** del usuario.
 - considerar latencia, costo, tamaño del input, frecuencia de ejecución y cómo entrega los resultados la UI al usuario
 - Es posible que tengas que hacer más de un modelo para predecir un grupo de productos. También habrá productos que ya no se vendan y no tenga sentido predecir.
-- En el ERD **falta: descripción de cada tabla (propósito, quién escribe, quién consume).**
 
 
 
@@ -78,7 +74,7 @@ Con la finalidad de atender las necesidades del cliente, se propone desarrollar 
 
 ## 2.1 Arquitectura
 
-<Diagrama de la arquitectura>
+![Arquitectura](diagrams/Arquitectura.jpeg)
 
 
 ### 2.3 Capa de datos
@@ -95,12 +91,12 @@ El catálogo de datos se gestiona mediante **AWS Glue Data Catalog**.
 
 #### ERD
 
-<Diagrama de la arquitectura>
+![ERD](diagrams/ERD_1cCompany.png)
 
 
 ### 2.4 Capa de Machine Learning
 
-El entrenamiento y evaluación del modelo se realiza mediante **Amazon SageMaker** Pipelines, que incluyen:
+El entrenamiento y evaluación del modelo se realiza mediante **Amazon SageMaker**, incluyendo:
 
 - Procesamiento de datos
 - Entrenamiento del modelo
@@ -110,8 +106,8 @@ Las métricas generadas se almacenan en **Amazon S3**, y el modelo seleccionado 
 
 A partir del modelo entrenado, se generan predicciones de demanda que se almacenan en **S3** como tablas de consumo.
 
-
-- Posteriormente, en **Amazon SageMaker** se realiza el entrenamiento y evaluación del modelo. En S3 se escriben las métricas resultantes. Se hace el registro del modelo que se llevará a producción en **Glue**. Para después generar las tablas de predicciones que se rtegistran en S3.
+- Para este MVP se optó por un esquema de pronósticos pre-computados offline al inicio del periodo. Este esquema permite ahorrar costos pues sólo se corre una vez al mes y al contar con los datos precalculados en la aplicación, la latencia se reduce considerablemente. 
+- Tanto en la generación
 
 
 
@@ -126,9 +122,7 @@ A partir del modelo entrenado, se generan predicciones de demanda que se almacen
 
 
 
-- **Amazon ECS (Fargate)**
-- **Amazon ECR**
-- **AWS Glue Data Catalog** OK
+- 
 - **Amazon RDS** — aunque sea para un subconjunto de datos operacionales (catálogos, metadata del POC, estado de jobs, feedback de negocio, lo que ustedes decidan)
 - **AWS CloudFormation** — para el despliegue de la capa de infraestructura persistente del POC (la app y la base de datos), no a mano desde la consola
 - **AWS Secrets Manager** — para gestionar las credenciales de la base de datos que lea su aplicación.
@@ -144,11 +138,11 @@ A partir del modelo entrenado, se generan predicciones de demanda que se almacen
 | Servicio | Justificación |
 |----------|---------------|
 | **Amazon S3** | En el briefing, el cliente solicitó contar con un espacio de almacenamiento seguro y persistido fuera de la aplicación, de forma que los datos estén disponibles aunque la aplicación esté apagada. Además, S3 permite almacenar los datos crudos en su formato original (CSV), así como datos transformados (tabulares), modelos y otros artefactos; es decir, no sólo recibe datos estructurados y con esquema. POr otra parte, al ser un servicio escalable y de bajo costo, se alinea con el objetivo de mantener un presupuesto acotado. Finalmente, como que las predicciones se generan de forma mensual y no se requiere acceso transaccional, S3 es una buena herramiebnta para este proyecto. |
-| AWS Secrets Manager | El acceso a los datos del cliente, tanto para su extracción como para la conexión con servicios como la base de datos, requiere un manejo seguro de credenciales, pues se trata de información sensible. El contar ocn un gestor de contraseñas, nos permite evitar su exposición en el código o en archivos de configuración que podrían ser accidentalmente subidos al repositorio o quedar expuestos. Esto reduce mucho el riesgo de vulnerabilidades y fortalece la seguridad de la solución. |
-| AWS Glue Data Catalog | Nos permite centralizar y gestionar los metadatos de las tablas generadas en las distintas capas del modelo de datos (Bronz, Silver y Gold), facilitando su consulta por otros componentes de la solución. Al tratarse de un servicio *serverless*, su uso implica un costo reducido y menos dificultaeds de administración. |
-|----------|---------------|
-|----------|---------------|
-|----------|---------------|
+| **AWS Secrets Manager** | El acceso a los datos del cliente, tanto para su extracción como para la conexión con servicios como la base de datos, requiere un manejo seguro de credenciales, pues se trata de información sensible. El contar ocn un gestor de contraseñas, nos permite evitar su exposición en el código o en archivos de configuración que podrían ser accidentalmente subidos al repositorio o quedar expuestos. Esto reduce mucho el riesgo de vulnerabilidades y fortalece la seguridad de la solución. |
+| **AWS Glue Data Catalog** | Nos permite centralizar y gestionar los metadatos de las tablas generadas en las distintas capas del modelo de datos (Bronz, Silver y Gold), facilitando su consulta por otros componentes de la solución. Al tratarse de un servicio *serverless*, su uso implica un costo reducido y menos dificultaeds de administración. |
+| **Amazon ECS (Fargate)** |---------------|
+| **Amazon ECR** |---------------|
+| **Amazon RDS** |---------------|
 |----------|---------------|
 |----------|---------------|
 |----------|---------------|
