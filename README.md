@@ -79,7 +79,7 @@ en el README deben poder defender por qué cada uno está ahí.
 - Link to .drawio file
 - Image (PNG / SVG)
 
-![ERD](docs/diagrams/ERD_1cCompany.png){width="75%"}
+![ERD](docs/diagrams/ERD_1cCompany.png)
 
 [ERD Link](https://drive.google.com/file/d/1AD8gMyTQiBvfQw9bfuljlbslZcRxYDkO/view?usp=sharing)
 
