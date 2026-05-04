@@ -7,27 +7,11 @@ theme: cosmo
 format:
   html:
     toc: true
+    toc-depth: 4
     toc-location: left
     page-layout: full
 jupyter: python3
 ---
-
-# Briefing
-
-Necesidades:
-- Incluir filtro por tienda o categría y ver proyección del próximo periodo (Respuesta en segundos no en minutos)
-- Archivo con pronósticos del mes siguiente para todos los productos de cada categoría, a veces para todo el catálogo (masivo) **pendiente: lo guarde en un lugar al que él pueda llegar y me avise cuando esté listo**
-- Agregar cortes por región, por canal.
-- Disponible en una URL que se pueda abrir desde cualquier equipo de la empresa, siempre disponible.
-- Presupuesto acotado **falta: estimar costos**
-- Logging para resolver si hay alguna falla, si el endpoint está caído o si tarda demasiado, saber cuántas veces se ha llamado al modelo.
-- **Falta: Precisión (evaluación vs groundthruth) y KPIs de los errores de predicciones por grupo de productos y a nivel producto**
-- Captura del feedback en base de datos, con vista de los mensajes reportados
-- **falta:** modo **batch** en el que el usuario selecciona un grupo más grande (una categoría completa, todos los productos de una tienda, o el catálogo completo) y el sistema produce el pronóstico para ese grupo **sin degradar la experiencia** del usuario.
-- considerar latencia, costo, tamaño del input, frecuencia de ejecución y cómo entrega los resultados la UI al usuario
-- Es posible que tengas que hacer más de un modelo para predecir un grupo de productos. También habrá productos que ya no se vendan y no tenga sentido predecir.
-
-
 
 
 # 1. Introducción
@@ -71,13 +55,15 @@ Adicionalmente, el MVP deberá:
 
 Con la finalidad de atender las necesidades del cliente, se propone desarrollar una aplicación de Streamlit desplegada en AWS con una URL pública accesible desde cualquier navegador en equipos de cómputo de la 1C Company. Esta aplicación permite separar en capas el almacenamiento de datos, el procesamiento analítico y la capa de consumo, lo que facilita su escalabilidad y mantenibilidad, al tiempo que mantiene su disponibilidad.
 
+**Link a la solución:** [Demand Forecasting App](http://98.84.41.174:8501)
+
 
 ## 2.1 Arquitectura
 
 ![Arquitectura](diagrams/Arquitectura.jpeg)
 
 
-### 2.3 Capa de datos
+## 2.2 Capa de datos
 
 Los datos de ventas históricas (entrenamiento) se consumen desde una ubicación indicada por el cliente mediante su API (en este ejemplo se extraen de Kaggle) mediante acceso autenticado, gestionado a través de **AWS Secrets Manager**. Una vez ingeridos, se almacenan en **Amazon S3**.
 
@@ -89,12 +75,12 @@ Para esta capa se implementa un proceso ELT bajo el enfoque medallion (Bronze, S
 
 El catálogo de datos se gestiona mediante **AWS Glue Data Catalog**.
 
-#### ERD
+### ERD
 
 ![ERD](diagrams/ERD_1cCompany.png)
 
 
-### 2.4 Capa de Machine Learning
+## 2.3 Capa de Machine Learning
 
 El entrenamiento y evaluación del modelo se realiza mediante **Amazon SageMaker**, incluyendo:
 
@@ -108,11 +94,10 @@ A partir del modelo entrenado, se generan predicciones de demanda que se almacen
 
 - Para este MVP se optó por un esquema de pronósticos pre-computados offline al inicio del periodo. Este esquema permite ahorrar costos pues sólo se corre una vez al mes a través de un Notebook programado de manera mensual (**Pipeline de datos y de ML** ). Una ventaja es que al contar con los datos precalculados en la aplicación, la latencia se reduce considerablemente. 
 
+- Todo el código se cuenta con logging detallado, lo que permite identificar y comprender fallas o problemas en el flujo de la pipeline.
 
 
-
-
-### Justificación del uso de herramientas
+## 2.4 Justificación del uso de herramientas
 
 | Servicio | Justificación |
 |----------|---------------|
@@ -126,24 +111,77 @@ A partir del modelo entrenado, se generan predicciones de demanda que se almacen
 |**AWS CloudFormation**| LO utilizzamos para definir y desplegar la infraestructura como código. Esto permite que los recursos de AWS necesarios para el MVP se creen de forma ordenada, reproducible y documentada, reduciendo errores manuales. También facilita que la solución pueda replicarse, modificarse o escalarse en etapas posteriores del proyecto.|
 
 
-## Costos mensuales
+## 2.5 Costos mensuales
 
 - **Consideraciones de costo y operación** — estimación mensual y cómo se apagan los recursos.
 
-## Reentrenamiento
+## 2.6 Reentrenamiento
 
-## Precisión (evaluación vs groundthruth) y KPIs de los errores de predicciones
+La arquitectura actual permite el reentrenamiento del modelo, ya que los datos históricos se encuentran almacenados de forma centralizada en Amazon S3 y el proceso de entrenamiento está implementado en Amazon SageMaker. Esto hace posible que podamos volver a entrenar el modelo de manera periódica utilizando datos, siempre que se el cliente proporcione los datos en el mismo sitio y bajo las mismas condiciones.
 
-- **Evaluación del modelo** — métricas de error por grupo de productos y a nivel producto, comparación contra el baseline naive, y screenshots de las gráficas de evaluación vs. ground truth.
 
-## Tour de la aplicación
+## 3. Métricas de desempeño del modelo
+
+A continuación se presentan las métricas del modelo, que nos permiten entender su grado de precisión:
+
+### 3.1 Métricas globales
+
+```{python}
+#| echo: false
+import pandas as pd
+from itables import show
+
+df = pd.read_csv('../data/xgboost_simple_global.csv')
+show(df)
+```
+
+### 3.2 Métricas a nivel categoría principal
+```{python}
+#| echo: false
+df = pd.read_csv('../data/xgboost_simple_main_category.csv')
+show(df)
+```
+
+### 3.3 Métricas a nivel categoría
+
+```{python}
+#| echo: false
+df = pd.read_csv('../data/xgboost_simple_category.csv')
+show(df)
+```
+
+
+## 4. Tour de la aplicación
 - **Tour de la aplicación** — screenshots de **cada vista** del Streamlit (inferencia individual, batch, exploración, KPIs, feedback de negocio, listado de productos con problemas) mostrando la UI con datos reales.
 
-## Limitaciones y proximos pasos
-- **Limitaciones y próximos pasos** — qué dejaron fuera y cómo se escalaría a producción.
+## 5. Limitaciones y proximos pasos
 
-## Uso de herramientas de IA en el proyecto
-declaración explícita (ver sección de honestidad académica).
+En cuanto a las limitaciones tenemos:
+
+- **Entrenamiento:** Aunque el modelo puede reentrenarse con nuevos datos, no se encuentra completamiente automatizado. El MVP actual se basa en la ejecución de una programada de un notebook, no en una pipeline orquestada que gestione automáticamente el proceso.
+- **INferencia en tiempo real:** Atendiendo los requerimientos del cliente, se propuso un esquema de inferencia offline (predicciones precomputadas), sin embargo, esto limita la posibilidad de los equipos de contar con información actualizada a mitad del periodo, por ejemplo, lo que podría traducirse en menos margen de acción ante cambios repentinos en el mercado.
+- **Gestión de notificaciones:** AUnque la generación de archivos para el cliente se encuentra funcionando conforme a lo especificado, el sistema de alertamiento no está implementado en esta versión.
+- **Monitoreo del modelo:** Aunque se cuenta con métricas de evaluación, con la versión actual no se puede monitorear el desempeño del modelo de forma continua para identificar posibles degradaciones del modelo o modificaciones en los datos de entrada.
+
+Los siguientes pasos prioritarios serían:
+
+- La implementación de varios modelos (en lugar de uno solo) para mejorar la precisión de las proyecciones.
+- La mejora en la experiencia del usuario basado en el feedback recibido a través de la aplicación.
+- La implementación del monitoreo del modelo.
+
+## 6. Uso de herramientas de IA en el proyecto
+
+Las herramientas de inteligencia artificial fueron utilizadas como un recurso de apoyo durante el desarrollo de este proyecto, principalmente para mejorar la eficiencia en tareas de documentación y comunicación, así como para resolver dudas técnicas específicas.
+
+Su uso incluyó:
+
+- Generación y mejora de documentación para funciones y scripts.
+- Traducción y síntesis de secciones del README (por ejemplo, Project Objective and Description) a partir del contenido del reporte.
+- Revisión y mejora de redacción en inglés, especialmente en mensajes de logging y descripciones técnicas, para asegurar claridad y naturalidad.
+- Apoyo en la resolución de dudas puntuales, como la configuración de roles de acceso (por ejemplo, habilitar que SageMaker acceda de forma segura a Secrets Manager para fuentes externas como Kaggle), la configuración del la pipeline para el NOtebook.
+- Apoyo en la refactorización del código de predicciones.
+
+Todas las decisiones de arquitectura, diseño del sistema, implementación y validación de la solución fueron realizadas por nosotros. 
 
 
 # Apéndice
@@ -184,5 +222,24 @@ declaración explícita (ver sección de honestidad académica).
 
 ![Sagemaker Pipeline](/images/Data_ML_Pipeline.png){width="75%"}
 
+* AWS Secret Manager: 
 
-- **Screenshots de los recursos de AWS desplegados** — consola de ECS con el servicio corriendo, CloudFormation stacks en `CREATE_COMPLETE`, ECR con la imagen publicada, RDS disponible, y el endpoint público de la app abierto en el browser.
+![AWS Secret Manager](/images/AWS_Secret_Manager.png){width="75%"}
+![AWS Secret Manager2](/images/AWS_Secret_Manager2.png){width="75%"}
+
+* Streamlit: 
+
+![Streamlit](/images/Streamlit.png){width="75%"}
+![Streamlit2](/images/Streamlit_cluster.png){width="75%"}
+
+* Data and ML Pipeline: 
+
+![Sagemaker Pipeline](/images/Data_ML_Pipeline.png){width="75%"}
+
+* Data and ML Pipeline: 
+
+![Sagemaker Pipeline](/images/Data_ML_Pipeline.png){width="75%"}
+
+* ECR: 
+
+![ECR](/images/ECR.jpeg){width="75%"}
