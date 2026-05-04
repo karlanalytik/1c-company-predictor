@@ -106,29 +106,8 @@ Las métricas generadas se almacenan en **Amazon S3**, y el modelo seleccionado 
 
 A partir del modelo entrenado, se generan predicciones de demanda que se almacenan en **S3** como tablas de consumo.
 
-- Para este MVP se optó por un esquema de pronósticos pre-computados offline al inicio del periodo. Este esquema permite ahorrar costos pues sólo se corre una vez al mes y al contar con los datos precalculados en la aplicación, la latencia se reduce considerablemente. 
-- Tanto en la generación
+- Para este MVP se optó por un esquema de pronósticos pre-computados offline al inicio del periodo. Este esquema permite ahorrar costos pues sólo se corre una vez al mes a través de un Notebook programado de manera mensual (**Pipeline de datos y de ML** ). Una ventaja es que al contar con los datos precalculados en la aplicación, la latencia se reduce considerablemente. 
 
-
-
-
-
-
-
-- aplicación de Streamlit desplegada en AWS con una URL pública accesible desde cualquier browser.
-- Pre-computar los pronósticos offline (p. ej. en un job programado o un notebook) y guardarlos como tabla en S3/Athena o RDS; Streamlit solo los lee.
-
-
-
-
-
-- 
-- **Amazon RDS** — aunque sea para un subconjunto de datos operacionales (catálogos, metadata del POC, estado de jobs, feedback de negocio, lo que ustedes decidan)
-- **AWS CloudFormation** — para el despliegue de la capa de infraestructura persistente del POC (la app y la base de datos), no a mano desde la consola
-- **AWS Secrets Manager** — para gestionar las credenciales de la base de datos que lea su aplicación.
-- **Amazon SageMaker — Batch Transform (opcional)** — si deciden usarlo como mecanismo para ejecutar inferencia batch desde la app, inclúyanlo en el diagrama y justifíquenlo. Si no lo usan, está bien — pero justifiquen en el reporte la alternativa que escogieron.
-
-- **Pipeline de datos y de ML** — flujo end-to-end desde S3 hasta la predicción mostrada en la UI. Describan cómo ejecutan los modelos desde Streamlit (pre-cómputo, inferencia in-process, Batch Transform, u otro mecanismo) y justifiquen la decisión en términos de latencia, costo y tamaño del input. Incluyan también el manejo de credenciales con Secrets Manager.
 
 
 
@@ -140,12 +119,12 @@ A partir del modelo entrenado, se generan predicciones de demanda que se almacen
 | **Amazon S3** | En el briefing, el cliente solicitó contar con un espacio de almacenamiento seguro y persistido fuera de la aplicación, de forma que los datos estén disponibles aunque la aplicación esté apagada. Además, S3 permite almacenar los datos crudos en su formato original (CSV), así como datos transformados (tabulares), modelos y otros artefactos; es decir, no sólo recibe datos estructurados y con esquema. POr otra parte, al ser un servicio escalable y de bajo costo, se alinea con el objetivo de mantener un presupuesto acotado. Finalmente, como que las predicciones se generan de forma mensual y no se requiere acceso transaccional, S3 es una buena herramiebnta para este proyecto. |
 | **AWS Secrets Manager** | El acceso a los datos del cliente, tanto para su extracción como para la conexión con servicios como la base de datos, requiere un manejo seguro de credenciales, pues se trata de información sensible. El contar ocn un gestor de contraseñas, nos permite evitar su exposición en el código o en archivos de configuración que podrían ser accidentalmente subidos al repositorio o quedar expuestos. Esto reduce mucho el riesgo de vulnerabilidades y fortalece la seguridad de la solución. |
 | **AWS Glue Data Catalog** | Nos permite centralizar y gestionar los metadatos de las tablas generadas en las distintas capas del modelo de datos (Bronz, Silver y Gold), facilitando su consulta por otros componentes de la solución. Al tratarse de un servicio *serverless*, su uso implica un costo reducido y menos dificultaeds de administración. |
-| **Amazon ECS (Fargate)** |---------------|
-| **Amazon ECR** |---------------|
-| **Amazon RDS** |---------------|
-|----------|---------------|
-|----------|---------------|
-|----------|---------------|
+| **SageMaker Processing Jobs / Notebooks** | A fin de orquestar y programar la corrida periódica de los modelos, se recurrió al uso de un Notebook programado en SageMaker. Esto nos permite garantizar la actualización y procesamiento de datos, así como el entrenamiento del modelo y la generación de predicciones de forma periódica. COnsiderando el tamaño de los datos y las demandas del modelo, una instancia ml.t3.large fue suficiente. En caso de requerir un incremento en capacidad, existe margen para ecalar a una instancia superior como ml.t3.xlarge. Una ventaja de este servicio es que no genera costos de cómputo a lo largo del mes, sólo mientras se usa. |
+| **Amazon ECR** |Se utilizó para almacenar la imagen Docker de la aplicación. Esto permitío tener una versión empaquetada y reproducible del producto, para después desplegarla en ECS Fargate. |
+| **Amazon ECS (Fargate)** |Se utilizó para desplegar la aplicación web en contenedores sin necesidad de administrar servidores. Esto atendiendo al requerimiento de contar con una aplicación disponible en una URL, accesible desde cualquier equipo de la empresa y que no dependa de una máquina local encendida. Además, Fargate permite escalar la aplicación de forma sencilla y pagar principalmente por los recursos utilizados durante su ejecución.|
+| **Amazon RDS** | Esta herramienta nos permitió captar el feedback del usuario para mejorar nuestra aplicación en una etapa posterior. Es un servicio más costoso, pero si el proyecto avanza, es muy útil poder contar con estos comentarios de los usuarios de la informaicón de forma fresca, justo tras haber usado la aplicación (información transaccional). |
+|**AWS CloudFormation**| LO utilizzamos para definir y desplegar la infraestructura como código. Esto permite que los recursos de AWS necesarios para el MVP se creen de forma ordenada, reproducible y documentada, reduciendo errores manuales. También facilita que la solución pueda replicarse, modificarse o escalarse en etapas posteriores del proyecto.|
+
 
 ## Costos mensuales
 
@@ -188,6 +167,22 @@ declaración explícita (ver sección de honestidad académica).
 * Capa Gold: 
 
 ![S3 Gold](/images/S3_gold.png){width="75%"}
+
+* Model: 
+
+![S3 Model](/images/S3_model.png){width="75%"}
+
+* Pre-computed predictions: 
+
+![S3 Predictions](/images/S3_predictions.png){width="75%"}
+
+* Metrics: 
+
+![S3 Detailed Metrics](/images/S3_predictions.png){width="75%"}
+
+* Data and ML Pipeline: 
+
+![Sagemaker Pipeline](/images/Data_ML_Pipeline.png){width="75%"}
 
 
 - **Screenshots de los recursos de AWS desplegados** — consola de ECS con el servicio corriendo, CloudFormation stacks en `CREATE_COMPLETE`, ECR con la imagen publicada, RDS disponible, y el endpoint público de la app abierto en el browser.
