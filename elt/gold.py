@@ -102,10 +102,68 @@ def create_monthly_sales(sales: pd.DataFrame) -> pd.DataFrame:
         revenue_month=("revenue", "sum"),
     )
 
+    monthly_sales["item_cnt_month"] = monthly_sales["item_cnt_month"].clip(0, 20)
+
     logger.info(f"Monthly sales created: {len(monthly_sales)} rows")
 
     return monthly_sales
 
+
+def add_city_feature(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Extract city name from shop_name and encode it as a numeric feature.
+    """
+    df = df.copy()
+
+    df["city_name"] = (
+        df["shop_name"]
+        .str.strip()
+        .str.replace(r"^[^A-Za-zА-Яа-я]+", "", regex=True)
+        .str.split()
+        .str[0]
+    )
+
+    city_mapping = {
+        "СПб": "Санкт-Петербург",
+        "Н.Новгород": "Нижний_Новгород",
+        "РостовНаДону": "Ростов_на_Дону",
+        "Выездная": "online_other",
+        "Интернет-магазин": "online_other",
+        "Цифровой": "online_other",
+    }
+
+    df["city_name"] = df["city_name"].replace(city_mapping)
+    df["city_code"] = df["city_name"].astype("category").cat.codes
+
+    return df
+
+def add_main_category_feature(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Extract main category from item_category_name and encode it as a numeric feature.
+    """
+    df = df.copy()
+
+    df["main_category"] = (
+        df["item_category_name"]
+        .str.strip()
+        .str.split(" - ")
+        .str[0]
+    )
+
+    category_mapping = {
+        "Игры Android": "Игры",
+        "Игры MAC": "Игры",
+        "Карты оплаты (Кино, Музыка, Игры)": "Карты оплаты",
+        "Чистые носители (шпиль)": "Чистые носители",
+        "Чистые носители (штучные)": "Чистые носители",
+        "Билеты (Цифра)": "Билеты",
+    }
+
+    df["main_category_name"] = df["main_category"].replace(category_mapping)
+
+    df["main_category_code"] = df["main_category"].astype("category").cat.codes
+
+    return df
 
 def merge_tables(
     monthly_sales: pd.DataFrame,
@@ -164,6 +222,19 @@ def add_naive_features(df: pd.DataFrame) -> pd.DataFrame:
         ]
     ].mean(axis=1)
 
+    lag_cols = []
+    for lag in [1, 2, 3]:
+        col = f"item_cnt_month_lag_{lag}"
+        lag_cols.append(col)
+    
+    df[lag_cols + ["naive_3m_prediction"]] = (
+        df[lag_cols + ["naive_3m_prediction"]]
+        .fillna(0)
+        .clip(lower=0, upper=20)
+    )
+    
+    df["has_history"] = (df["item_cnt_month_lag_1"] > 0).astype(int)
+
     logger.info("Naive baseline features added")
 
     return df
@@ -200,7 +271,6 @@ def identify_inactive_items(df: pd.DataFrame, days: int) -> pd.DataFrame:
 
     return last_sales
 
-# TODO: Add categorical features
 
 def validate_gold_table(df: pd.DataFrame) -> None:
     """
@@ -214,10 +284,14 @@ def validate_gold_table(df: pd.DataFrame) -> None:
     required_columns = [
         "date_block_num",
         "shop_id",
+        "city_name",
+        "city_code",
         "item_id",
         "item_cnt_month",
         "item_category_id",
         "item_category_name",
+        "main_category_code",
+        "main_category_name",
         "shop_name",
         "naive_3m_prediction",
         "inactive"
@@ -283,6 +357,8 @@ def main():
         shops = read_silver_table(args.bucket, "shops")
 
         monthly_sales = create_monthly_sales(sales)
+        shops = add_city_feature(shops)
+        item_categories = add_main_category_feature(item_categories)
 
         gold_df = merge_tables(
             monthly_sales=monthly_sales,
